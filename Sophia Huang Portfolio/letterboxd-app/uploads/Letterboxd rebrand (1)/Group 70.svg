@@ -1,0 +1,29 @@
+<svg width="391" height="116" viewBox="0 0 391 116" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect x="0.5" y="0.5" width="78" height="115" fill="url(#pattern0_107_504)" stroke="black"></rect>
+<rect x="312.5" y="0.5" width="78" height="115" fill="url(#pattern1_107_504)" stroke="black"></rect>
+<rect x="78.5" y="0.5" width="78" height="115" fill="url(#pattern2_107_504)" stroke="black"></rect>
+<rect x="156.5" y="0.5" width="78" height="115" fill="url(#pattern3_107_504)" stroke="black"></rect>
+<rect x="234.5" y="0.5" width="78" height="115" fill="url(#pattern4_107_504)" stroke="black"></rect>
+<defs>
+<pattern id="pattern0_107_504" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image0_107_504" transform="scale(0.00196095 0.0013245)"></use>
+</pattern>
+<pattern id="pattern1_107_504" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image1_107_504" transform="matrix(0.00198807 0 0 0.00134282 0 -0.00691465)"></use>
+</pattern>
+<pattern id="pattern2_107_504" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image2_107_504" transform="scale(0.00196095 0.0013245)"></use>
+</pattern>
+<pattern id="pattern3_107_504" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image3_107_504" transform="scale(0.00196095 0.0013245)"></use>
+</pattern>
+<pattern id="pattern4_107_504" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image4_107_504" transform="matrix(0.00196464 0 0 0.00132699 0 -0.000939234)"></use>
+</pattern>
+<image id="image0_107_504" width="510" height="755" preserveAspectRatio="none"></image>
+<image id="image1_107_504" width="503" height="755" preserveAspectRatio="none"></image>
+<image id="image2_107_504" width="510" height="755" preserveAspectRatio="none"></image>
+<image id="image3_107_504" width="510" height="755" preserveAspectRatio="none"></image>
+<image id="image4_107_504" width="509" height="755" preserveAspectRatio="none"></image>
+</defs>
+</svg>
