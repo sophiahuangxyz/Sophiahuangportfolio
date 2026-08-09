@@ -571,7 +571,7 @@ class Component extends DCLogic {
       this._zoom = Z;
       // collapse to hamburger only once the nav links would cross into the name
       const narrow = Math.min(1558, W / Math.max(Z, 0.45375)) < 1350;
-      if (root) root.style.setProperty('--lbgap', narrow ? '-743px' : '0px');
+      if (root) root.style.setProperty('--lbgap', '-743px');
       if (narrow !== !!this.state.narrow) this.setState({ narrow, hamOpen: false });
     };
     this._onRz();
@@ -600,12 +600,28 @@ class Component extends DCLogic {
           const hands = id === 'hands-carousel';
           const accKey = hands ? '_hAcc' : '_kAcc';
           this[accKey] = (this[accKey] || 0) + e.deltaY;
-          if (Math.abs(this[accKey]) > 50) {
+          if (Math.abs(this[accKey]) > 60) {
             const dir = this[accKey] > 0 ? 1 : -1;
             this[accKey] = 0;
             hands ? this._hAdvance(dir) : this._kAdvance(dir);
           }
         }, { passive: false });
+        // touch: swipe up/down advances the carousel
+        el.addEventListener('touchstart', (e) => {
+          if (id === 'kengo-lightbox' || id === 'hands-lightbox') return;
+          el._swY = e.touches[0].clientY; el._swX = e.touches[0].clientX; el._swDone = false;
+        }, { passive: true });
+        el.addEventListener('touchmove', (e) => {
+          if (el._swY == null || el._swDone) return;
+          if (id === 'kengo-lightbox' || id === 'hands-lightbox') return;
+          const dy = el._swY - e.touches[0].clientY, dx = el._swX - e.touches[0].clientX;
+          if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+            el._swDone = true;
+            const hands = id === 'hands-carousel';
+            hands ? this._hAdvance(dy > 0 ? 1 : -1) : this._kAdvance(dy > 0 ? 1 : -1);
+          }
+        }, { passive: true });
+        el.addEventListener('touchend', () => { el._swY = null; }, { passive: true });
       }
     }, 350);
     this._kengoAuto = setInterval(() => {
