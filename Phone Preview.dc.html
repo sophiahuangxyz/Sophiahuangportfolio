@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  html, body { margin: 0; padding: 0; background: #14172B; }
+  a { color: #AAB4E8; } a:hover { opacity: 0.75; }
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; padding: 28px; display: flex; flex-direction: column; align-items: center; gap: 16px; font-family: system-ui, sans-serif">
+  <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center">
+    <button onClick="{{ goProjects }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Home</button>
+    <button onClick="{{ goLetterboxd }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Letterboxd</button>
+    <button onClick="{{ goKengo }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Kengo Kuma</button>
+    <button onClick="{{ goHands }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Invisable Hands</button>
+    <button onClick="{{ goFusar }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Fusar</button>
+    <button onClick="{{ goContact }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Contact</button>
+    <button onClick="{{ goResume }}" style="font: 13px system-ui; padding: 7px 14px; border-radius: 999px; border: 1px solid #3A4270; background: #1D2240; color: #C7CEF5; cursor: pointer">Resume</button>
+  </div>
+  <div style="color: #8A93C4; font-size: 12px">iPhone viewport — 390 × 844 (what visitors see on a phone)</div>
+  <div style="width: 390px; height: 844px; flex: none; border-radius: 28px; border: 6px solid #2A3057; overflow: hidden; background: #2F60D4; box-shadow: 0 24px 60px rgba(0,0,0,0.45)">
+    <iframe ref="{{ frameRef }}" src="Sophia Huang Portfolio.dc.html" title="phone-size preview of sophiahuang.net" style="width: 390px; height: 844px; border: none; display: block"></iframe>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const go = (page) => () => {
+      const f = this._frame; if (!f || !f.contentWindow) return;
+      f.contentWindow.location.hash = page ? '#' + page : '';
+      f.contentWindow.scrollTo(0, 0);
+    };
+    return {
+      frameRef: (el) => { this._frame = el; },
+      goProjects: go(''), goLetterboxd: go('letterboxd'), goKengo: go('kengo'),
+      goHands: go('hands'), goFusar: go('fusar'), goContact: go('contact'), goResume: go('resume')
+    };
+  }
+}
+</script>
+</body>
+</html>
