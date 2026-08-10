@@ -12,7 +12,7 @@
 // WebKit (Safari/iOS) doesn't paint iframe content scaled under an ancestor's CSS zoom.
 // Compensate by scaling our body to match the parent page's zoom. WebKit-only (GestureEvent).
 if(!('GestureEvent' in window))return;
-function pz(){try{var el=window.frameElement,p=1;while(el){var cs=el.ownerDocument.defaultView.getComputedStyle(el);var z=cs.zoom;if(z&&z!=='1'&&z!=='normal')p*=parseFloat(z)||1;var tr=cs.transform;if(tr&&tr.indexOf('matrix(')===0){var a=parseFloat(tr.slice(7));if(a)p*=a;}el=el.parentElement||(el.ownerDocument.defaultView.frameElement);}return p;}catch(e){return 1;}}
+function pz(){try{var el=window.frameElement,p=1;while(el){var z=el.ownerDocument.defaultView.getComputedStyle(el).zoom;if(z&&z!=='1'&&z!=='normal')p*=parseFloat(z)||1;el=el.parentElement||(el.ownerDocument.defaultView.frameElement);}return p;}catch(e){return 1;}}
 var last=null;
 function sync(){var v=pz();if(v===last||!document.body)return;last=v;var b=document.body;b.style.transformOrigin='0 0';b.style.transform=v===1?'':'scale('+v+')';}
 addEventListener('resize',sync);setInterval(sync,400);sync();})();</script>
