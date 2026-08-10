@@ -12,7 +12,7 @@
 // WebKit (Safari/iOS) doesn't paint iframe content scaled under an ancestor's CSS zoom.
 // Compensate by scaling our body to match the parent page's zoom. WebKit-only (GestureEvent).
 if(!('GestureEvent' in window))return;
-function pz(){try{var el=window.frameElement;while(el){var z=el.ownerDocument.defaultView.getComputedStyle(el).zoom;if(z&&z!=='1'&&z!=='normal')return parseFloat(z)||1;el=el.parentElement||(el.ownerDocument.defaultView.frameElement);}return 1;}catch(e){return 1;}}
+function pz(){try{var el=window.frameElement,p=1;while(el){var z=el.ownerDocument.defaultView.getComputedStyle(el).zoom;if(z&&z!=='1'&&z!=='normal')p*=parseFloat(z)||1;el=el.parentElement||(el.ownerDocument.defaultView.frameElement);}return p;}catch(e){return 1;}}
 var last=null;
 function sync(){var v=pz();if(v===last||!document.body)return;last=v;var b=document.body;b.style.transformOrigin='0 0';b.style.transform=v===1?'':'scale('+v+')';}
 addEventListener('resize',sync);setInterval(sync,400);sync();})();</script>
@@ -23,7 +23,7 @@ addEventListener('resize',sync);setInterval(sync,400);sync();})();</script>
 <link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400&amp;family=Istok+Web:wght@400;700&amp;display=swap" rel="stylesheet">
 <script src="./image-slot.js"></script>
 <style>
-html{background:transparent !important;overscroll-behavior:none;overflow:hidden;height:100%}body{margin:0;background:transparent !important;overscroll-behavior:none;overflow:hidden;height:100%;cursor:url('../assets/cursor-arrow.png') 1 0, auto}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;background:transparent !important;overscroll-behavior:none;overflow:hidden;height:100%}body{margin:0;background:transparent !important;overscroll-behavior:none;overflow:hidden;height:100%;cursor:url('../assets/cursor-arrow.png') 1 0, auto}
 a, a *, button, button *, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"] { cursor: url('../assets/cursor-hand.png') 10 3, pointer !important; }
 a{color:#40BCF4}a:hover{color:#7FD4F8}
 input::placeholder,textarea::placeholder{color:#9FA7AF;opacity:1}

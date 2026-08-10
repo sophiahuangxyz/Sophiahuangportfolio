@@ -8,12 +8,14 @@
 <body>
 <x-dc>
 <helmet>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Kelly+Slab&amp;family=IM+Fell+DW+Pica:ital@0;1&amp;display=swap" rel="stylesheet">
 <script src="./image-slot.js"></script>
 <style>
-  html, body { margin: 0; padding: 0; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
+  html, body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
   a, a *, button, button *, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"] { cursor: url('assets/cursor-hand.png') 10 3, pointer !important; }
   a { color: var(--ink, #FFFFFF); } a:hover { opacity: 0.75; }
   :root { --band-60: rgba(0,66,219,0.6); --band: #0042DB; --bg: #2F60D4; --ink: #FFFFFF; --ink-soft: rgba(255,255,255,0.8); --hero1: rgb(100,140,235); --hero2: rgb(85,131,238); --shadow: #0042DB; --box: #D9D9D9; --fruit-pos: 7.465% 45.639%; }
@@ -245,15 +247,15 @@
       </section>
     </sc-if>
     <sc-if value="{{ isHands }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="Our Invisable Hands Project" style="position: relative; height: max(calc(1150px + 120px * var(--ff, 1) + 290px * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)); background: var(--bg)">
+      <section data-screen-label="Our Invisable Hands Project" style="position: relative; height: max(calc(1150px + 120px * var(--ff, 1) + 380px * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)); background: var(--bg)">
         <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
-        <h1 style="position: absolute; left: calc(809px - 699px * var(--pd, 0)); top: calc(52px * (1 - var(--pd, 0)) + (-46px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 640px * var(--pd, 0)); text-align: var(--pdta, left); margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: 52px; line-height: 120%">Our Invisable Hands</h1>
-        <div id="hands-carousel" onPointerDown="{{ handsDown }}" onPointerUp="{{ handsUp }}" onPointerLeave="{{ handsLeave }}" style="touch-action: none; position: absolute; left: calc(42px + 68px * var(--pd, 0)); top: calc(36px + 120px * var(--ff, 1)); width: calc(980px + 360px * var(--pd, 0)); height: calc(653px + 240px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
+        <h1 style="position: absolute; left: calc(809px - 699px * var(--pd, 0)); top: calc(52px * (1 - var(--pd, 0)) + (-46px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 640px * var(--pd, 0)); text-align: var(--pdta, left); margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: calc(52px + 48px * var(--pd, 0)); line-height: 120%">Our Invisable Hands</h1>
+        <div id="hands-carousel" onPointerDown="{{ handsDown }}" onPointerUp="{{ handsUp }}" onPointerLeave="{{ handsLeave }}" style="touch-action: none; position: absolute; left: calc(42px + 68px * var(--pd, 0)); top: calc(36px + 120px * var(--ff, 1) + 90px * var(--pd, 0)); width: calc(980px + 360px * var(--pd, 0)); height: calc(653px + 240px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
           <sc-for list="{{ handsSlides }}" as="slide" hint-placeholder-count="0">
             <div role="img" aria-label="Our Invisable Hands zine" style="{{ slide.style }}"></div>
           </sc-for>
         </div>
-        <div style="position: absolute; left: calc(1072px - 962px * var(--pd, 0)); top: calc(56px + 120px * var(--ff, 1) + 930px * var(--pd, 0)); width: calc(432px + 908px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: 30px; line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
+        <div style="position: absolute; left: calc(1072px - 962px * var(--pd, 0)); top: calc(56px + 120px * var(--ff, 1) + 1020px * var(--pd, 0)); width: calc(432px + 908px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: calc(30px + 20px * var(--pd, 0)); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
           <p style="margin: 0 0 36px">The Cooper Hewitt: Made in America Exhibition, based in New York, showcases over 70 photographs of U.S. factories and manufacturing processes.</p>
           <p style="margin: 0">This zine translates the exhibition's own subject, the hidden labor behind manufacturing, into a layout, using bold, high contrast type to announce the theme before being able to see the photos. The repeated Peeps and piano string spreads use grid repetition, mirroring the exhibition's repeated gestures and assembly line rhythm. The full bleed single shots focus on the process of creation and allow viewers to appreciate industrial goods.</p>
         </div>
@@ -272,15 +274,15 @@
       </section>
     </sc-if>
     <sc-if value="{{ isKengo }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="Kengo Kuma Project" style="position: relative; height: max(calc(1150px + 120px * var(--ff, 1) + 290px * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)); background: var(--bg)">
+      <section data-screen-label="Kengo Kuma Project" style="position: relative; height: max(calc(1150px + 120px * var(--ff, 1) + 380px * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)); background: var(--bg)">
         <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
-        <h1 style="position: absolute; left: calc(809px - 699px * var(--pd, 0)); top: calc(52px * (1 - var(--pd, 0)) + (-46px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 640px * var(--pd, 0)); text-align: var(--pdta, left); margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: 52px; line-height: 120%">Kengo Kuma Brochure</h1>
-        <div id="kengo-carousel" onPointerDown="{{ kengoDown }}" onPointerUp="{{ kengoUp }}" onPointerLeave="{{ kengoLeave }}" style="touch-action: none; position: absolute; left: calc(42px + 68px * var(--pd, 0)); top: calc(36px + 120px * var(--ff, 1)); width: calc(980px + 360px * var(--pd, 0)); height: calc(653px + 240px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
+        <h1 style="position: absolute; left: calc(809px - 699px * var(--pd, 0)); top: calc(52px * (1 - var(--pd, 0)) + (-46px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 640px * var(--pd, 0)); text-align: var(--pdta, left); margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: calc(52px + 48px * var(--pd, 0)); line-height: 120%">Kengo Kuma Brochure</h1>
+        <div id="kengo-carousel" onPointerDown="{{ kengoDown }}" onPointerUp="{{ kengoUp }}" onPointerLeave="{{ kengoLeave }}" style="touch-action: none; position: absolute; left: calc(42px + 68px * var(--pd, 0)); top: calc(36px + 120px * var(--ff, 1) + 90px * var(--pd, 0)); width: calc(980px + 360px * var(--pd, 0)); height: calc(653px + 240px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
           <sc-for list="{{ kengoSlides }}" as="slide" hint-placeholder-count="0">
             <div role="img" aria-label="Kengo Kuma booklet" style="{{ slide.style }}"></div>
           </sc-for>
         </div>
-        <div style="position: absolute; left: calc(1072px - 962px * var(--pd, 0)); top: calc(56px + 120px * var(--ff, 1) + 930px * var(--pd, 0)); width: calc(432px + 908px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: 30px; line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
+        <div style="position: absolute; left: calc(1072px - 962px * var(--pd, 0)); top: calc(56px + 120px * var(--ff, 1) + 1020px * var(--pd, 0)); width: calc(432px + 908px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: calc(30px + 20px * var(--pd, 0)); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
           <p style="margin: 0 0 36px">Kengo Kuma is a contemporary architect known for his innovative use of materials and the relationship between architecture and nature.</p>
           <p style="margin: 0">This brochure focuses on his use of wood: I used the grain, joinery, and structural lines in each photograph as leading lines across the spread, keeping the layout photography-led and light on text to mirror Kuma's anti-object philosophy. I paced spreads by alternating full-bleed images with quiet typography to build rhythm, and paired the kanji 隈研吾 with the Latin wordmark and serif pull quotes to tie his culture and voice into the design.</p>
         </div>
@@ -317,7 +319,9 @@
       <section data-screen-label="Letterboxd Project" style="position: relative; height: calc(6071px + var(--lbgap, 0px)); background: var(--bg)">
         <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); height: 619px; z-index: 0; background: #1B232A">
           <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden">
+            <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; zoom: var(--pzi, 1); transform: scale(var(--pzs, 1)); transform-origin: 0 0">
             <iframe src="letterboxd-anim/Logo Animation.dc.html" title="Letterboxd logo animation" scrolling="no" style="position: absolute; left: -3.8%; top: 50%; width: 107.67%; aspect-ratio: 1677.5 / 666.4; transform: translateY(-50%); border: none; background: #1B232A; pointer-events: none"></iframe>
+            </div>
           </div>
           <div style="position: absolute; left: 0; top: 0; transform: scale(var(--heroscale, 1)); transform-origin: top left; width: var(--herocolw, 100%); height: 100%">
             <div style="position: absolute; left: 42px; top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ffhero, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ffhero, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
@@ -341,7 +345,9 @@
           </div>
           <div ref="{{ phoneRef }}" style="position: absolute; left: 1030px; top: calc(2350px + var(--lbgap, 0px)); width: 530.1px; height: 1100px; transform-origin: top left">
             <div style="position: absolute; left: 27.4px; top: 33.2px; width: 475.3px; height: 1033.6px; border-radius: 56.8px; overflow: hidden; background: #000">
+              <div style="position: absolute; left: 0; top: 0; width: 475.3px; height: 1033.6px; zoom: var(--pzi, 1); transform: scale(var(--pzs, 1)); transform-origin: 0 0">
               <iframe src="letterboxd-app/Letterboxd App.dc.html" title="Letterboxd app prototype — interactive" style="position: absolute; left: -47.3px; top: -56.8px; width: 482px; height: 1062px; border: none; transform: scale(1.1826); transform-origin: top left; background: transparent" allowtransparency="true"></iframe>
+              </div>
             </div>
             <img src="assets/phone-outline.png" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none">
           </div>
@@ -572,6 +578,11 @@ class Component extends DCLogic {
       const cs = Math.min(1, W / Z / 1558);
       if (root) {
         root.style.zoom = Z; root.style.setProperty('--pz', Z); root.style.setProperty('--cs', cs);
+        // iOS WebKit doesn't paint iframes under CSS zoom: neutralize zoom locally
+        // around each iframe (zoom: 1/Z) and re-shrink with a transform instead.
+        const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (/Mac/.test(navigator.platform || '') && navigator.maxTouchPoints > 1);
+        root.style.setProperty('--pzi', ios ? String(1 / Z) : '1');
+        root.style.setProperty('--pzs', ios ? String(Z) : '1');
         root.style.setProperty('--simw', pv ? (W / Z) + 'px' : 'calc(100vw / var(--pz, 0.9075))');
         root.style.setProperty('--bleedcap', pv ? '0px' : '-9999px');
         root.style.setProperty('--padcap', pv ? '0px' : '9999px');
@@ -701,6 +712,9 @@ class Component extends DCLogic {
         src.start();
       };
       window.addEventListener('click', this._onUiClick, true);
+      // iOS: wake the audio context on the first touch so taps make sound
+      this._acWake = () => { try { if (this._clickAC && this._clickAC.state === 'suspended') this._clickAC.resume(); } catch (err) {} };
+      window.addEventListener('touchend', this._acWake, { passive: true });
       fetch('assets/peel-8.5-9.5.wav').then((r) => r.arrayBuffer())
         .then((ab) => new Promise((res, rej) => this._clickAC.decodeAudioData(ab, res, rej)))
         .then((buf) => { this._peelBuf = buf; })
@@ -1098,10 +1112,12 @@ class Component extends DCLogic {
       fusarCardClick: (e) => { if (isSlotChrome(e)) return; e.preventDefault(); e.stopPropagation(); go('fusar')(); },
       isKengo: page === 'kengo',
       kengoCardClick: (e) => { if (isSlotChrome(e)) return; e.preventDefault(); e.stopPropagation(); go('kengo')(); },
-      kengoDown: () => { this._kHold = true; this._kDownAt = Date.now(); },
-      kengoUp: () => {
+      kengoDown: (e) => { this._kHold = true; this._kDownAt = Date.now(); this._kDownX = e.clientX; this._kDownY = e.clientY; },
+      kengoUp: (e) => {
         this._kHold = false; this._kLast = Date.now();
-        if (Date.now() - (this._kDownAt || 0) < 300) this.setState((s) => ({ kLightbox: true, kLbIdx: s.kengoIdx }));
+        // a real tap: quick AND barely moved — a swipe never opens the lightbox
+        const moved = Math.hypot((e.clientX || 0) - (this._kDownX || 0), (e.clientY || 0) - (this._kDownY || 0));
+        if (Date.now() - (this._kDownAt || 0) < 300 && moved < 12) this.setState((s) => ({ kLightbox: true, kLbIdx: s.kengoIdx }));
       },
       kengoLeave: () => { if (this._kHold) { this._kHold = false; this._kLast = Date.now(); } },
       isHands: page === 'hands',
@@ -1113,10 +1129,11 @@ class Component extends DCLogic {
           style: 'position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: ' + (off >= 2 ? 'none' : 'transform 0.95s cubic-bezier(0.3,0.75,0.25,1)') + '; transform: translateY(' + (off * 100) + '%); background: url(\'' + encodeURI(src) + '\') center / cover no-repeat',
         };
       }),
-      handsDown: () => { this._hHold = true; this._hDownAt = Date.now(); },
-      handsUp: () => {
+      handsDown: (e) => { this._hHold = true; this._hDownAt = Date.now(); this._hDownX = e.clientX; this._hDownY = e.clientY; },
+      handsUp: (e) => {
         this._hHold = false; this._hLast = Date.now();
-        if (Date.now() - (this._hDownAt || 0) < 300) {
+        const moved = Math.hypot((e.clientX || 0) - (this._hDownX || 0), (e.clientY || 0) - (this._hDownY || 0));
+        if (Date.now() - (this._hDownAt || 0) < 300 && moved < 12) {
           this.setState((s) => ({ hLightbox: true, hLbSrcs: this.HANDS_SRCS, hLbIdx: s.handsIdx || 0 }));
         }
       },

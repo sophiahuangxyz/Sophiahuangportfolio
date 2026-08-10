@@ -171,7 +171,7 @@
 
   function load() {
     if (loadP) return loadP;
-    loadP = fetch(STATE_FILE)
+    loadP = fetch(STATE_FILE, { cache: 'no-cache' })
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {
         // Merge: sidecar loses to any in-memory change that raced ahead of
@@ -568,7 +568,7 @@
       this._subFn = () => this._render();
       // Shadow-DOM listeners live with the shadow DOM — bound once here so
       // disconnect/reconnect (e.g. React remount) doesn't stack handlers.
-      this._empty.addEventListener('click', (e) => { e.stopPropagation(); this._input.click(); });
+      this._empty.addEventListener('click', (e) => { if (!this.hasAttribute('data-editable')) return; e.stopPropagation(); this._input.click(); });
       // Clicks on the slot's own chrome (Replace/Edit, reframe handles, spill)
       // must never bubble out to page-level click handlers (e.g. card navigation).
       root.addEventListener('click', (e) => {
