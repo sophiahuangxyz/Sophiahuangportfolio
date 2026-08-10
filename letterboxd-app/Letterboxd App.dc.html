@@ -12,7 +12,7 @@
 // WebKit (Safari/iOS) doesn't paint iframe content scaled under an ancestor's CSS zoom.
 // Compensate by scaling our body to match the parent page's zoom. WebKit-only (GestureEvent).
 if(!('GestureEvent' in window))return;
-function pz(){try{var el=window.frameElement,p=1;while(el){var z=el.ownerDocument.defaultView.getComputedStyle(el).zoom;if(z&&z!=='1'&&z!=='normal')p*=parseFloat(z)||1;el=el.parentElement||(el.ownerDocument.defaultView.frameElement);}return p;}catch(e){return 1;}}
+function pz(){try{var el=window.frameElement,p=1;while(el){var cs=el.ownerDocument.defaultView.getComputedStyle(el);var z=cs.zoom;if(z&&z!=='1'&&z!=='normal')p*=parseFloat(z)||1;var tr=cs.transform;if(tr&&tr.indexOf('matrix(')===0){var a=parseFloat(tr.slice(7));if(a)p*=a;}el=el.parentElement||(el.ownerDocument.defaultView.frameElement);}return p;}catch(e){return 1;}}
 var last=null;
 function sync(){var v=pz();if(v===last||!document.body)return;last=v;var b=document.body;b.style.transformOrigin='0 0';b.style.transform=v===1?'':'scale('+v+')';}
 addEventListener('resize',sync);setInterval(sync,400);sync();})();</script>
@@ -273,7 +273,7 @@ image-slot[data-mini]::part(empty){display:none}
         </sc-if>
         <div style="display:flex;gap:12px;padding:14px 13px 0 13px;justify-content:center;animation:{{ detAnim }}">
           <div style="position:relative;width:150px;height:217px;border:5px solid #000;box-sizing:border-box;background:#181C20;flex:none">
-            <image-slot id="{{ film.pidh }}" shape="rect" src="{{ film.psrc }}" placeholder="{{ film.t }} poster"></image-slot>
+            <image-slot id="{{ film.pidh }}" shape="rect" src="{{ film.psrch }}" placeholder="{{ film.t }} poster"></image-slot>
           </div>
           <div style="min-width:0;padding-top:4px">
             <div><span style="font-weight:700;font-size:21px;color:#F4F7FA">{{ film.t }}</span><span style="font-size:13px;color:#9FA7AF;margin-left:7px">· {{ film.y }}</span></div>
@@ -360,7 +360,7 @@ image-slot[data-mini]::part(empty){display:none}
         </div>
         <div style="display:flex;gap:12px;padding:12px 13px 0 13px;justify-content:center">
           <div onClick="{{ goDetail }}" title="Open film page" style="position:relative;width:150px;height:217px;border:5px solid #000;box-sizing:border-box;background:#181C20;flex:none">
-            <image-slot id="{{ film.pidh }}" shape="rect" src="{{ film.psrc }}" placeholder="{{ film.t }} poster"></image-slot>
+            <image-slot id="{{ film.pidh }}" shape="rect" src="{{ film.psrch }}" placeholder="{{ film.t }} poster"></image-slot>
           </div>
           <div style="min-width:0;padding-top:4px">
             <div onClick="{{ goDetail }}" style="cursor:pointer"><span style="font-weight:700;font-size:21px;color:#F4F7FA">{{ film.t }}</span><span style="font-size:13px;color:#9FA7AF;margin-left:7px">· {{ film.y }}</span></div>
@@ -1451,7 +1451,15 @@ class Component extends DCLogic {
     return Array.from({ length: n }, (_, i) => this.FRIEND_ACT[(h + i) % this.FRIEND_ACT.length]);
   }
 
+  psrch(id) {
+    const h = ["zoo2","wicked2","lilo","sinners","crime101","animalfarm","fnaf2"];
+    return h.includes(id) ? 'assets/slots/p-' + id + '-hero.webp' : this.psrc(id);
+  }
+
   psrc(id) {
+    // user-replaced posters live as real files (the sidecar only accepts data: URLs)
+    const ovr = ["zoo2","wicked2","avatar3","marty","frank","f1","sinners","bugonia","kpop","fnaf2","superman","weapons","smile","animalfarm","crime101","cure","minecraft","elio","lilo","thunder","odyssey","spiderman","dune3"];
+    if (ovr.includes(id)) return 'assets/slots/p-' + id + '-poster.webp';
     const webp = ['avatar3','bugonia','dune3','fnaf2','frank','lilo','marty','minecraft','wicked2','years28','zoo2'];
     return 'assets/posters/' + id + '.' + (webp.includes(id) ? 'webp' : 'jpg');
   }
@@ -1482,7 +1490,7 @@ class Component extends DCLogic {
   filmView(id, ctx, extra) {
     const f = this.fobj(id);
     return Object.assign({
-      t: f.t, y: f.y, pid: 'p-' + f.id + '-poster', pidm: 'p-' + f.id + '-mini', pidh: 'p-' + f.id + '-hero', psrc: this.psrc(f.id),
+      t: f.t, y: f.y, pid: 'p-' + f.id + '-poster', pidm: 'p-' + f.id + '-mini', pidh: 'p-' + f.id + '-hero', psrc: this.psrc(f.id), psrch: this.psrch(f.id),
       open: () => this.openFilm(f.id), compose: () => { this.addRecent(f.id); this.openCompose(f.id); },
       openInfo: () => { this.addRecent(f.id); this.openFilm(f.id); },
       stars: this.stars(f.r, 12)
