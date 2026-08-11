@@ -320,7 +320,7 @@
       <section data-screen-label="Letterboxd Project" style="position: relative; height: calc(6071px + var(--lbgap, 0px) + var(--lbx, 0px)); background: var(--bg)">
         <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); height: 619px; z-index: 0; background: #1B232A">
           <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden">
-            <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; zoom: var(--pzi, 1); transform: scale(var(--pzs, 1)); transform-origin: 0 0">
+            <div style="position: absolute; left: 0; top: 0; width: calc(100% * var(--pzi, 1)); height: calc(100% * var(--pzi, 1)); zoom: var(--pzi, 1); transform: scale(var(--pzs, 1)); transform-origin: 0 0">
             <iframe src="letterboxd-anim/Logo Animation.dc.html" title="Letterboxd logo animation" scrolling="no" style="position: absolute; left: -3.8%; top: 50%; width: 107.67%; aspect-ratio: 1677.5 / 666.4; transform: translateY(-50%); border: none; background: #1B232A; pointer-events: none"></iframe>
             </div>
           </div>
@@ -580,19 +580,34 @@ class Component extends DCLogic {
       // unaffected by the inner zoom. Use it; fall back to innerWidth only when
       // the two agree (desktop, where they differ by at most a scrollbar).
       const cw = document.documentElement.clientWidth || window.innerWidth;
-      const W = pv ? 420 : (Math.abs(window.innerWidth - cw) > 40 ? cw : window.innerWidth);
+      let W = pv ? 420 : (Math.abs(window.innerWidth - cw) > 40 ? cw : window.innerWidth);
+      // Belt-and-suspenders for real phones: iOS Safari can report an inflated
+      // layout viewport (e.g. zoomed-out-to-fit overflowing content), which kept
+      // the phone breakpoint from tripping. Cap W by the device's screen size —
+      // but only on touch-primary devices (desktop keeps the exact old path;
+      // screen.width there is page-zoom-independent and would fight Ctrl+-),
+      // and orientation-aware, because iOS reports screen.width/height as the
+      // PORTRAIT pair regardless of rotation (Android rotates them; min/max of
+      // the pair gives the correct current-orientation width on both).
+      if (!pv && window.screen && screen.width && window.matchMedia && matchMedia('(pointer: coarse)').matches) {
+        const land = matchMedia('(orientation: landscape)').matches;
+        const sw = land ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height);
+        if (sw) W = Math.min(W, sw);
+      }
       const Z = Math.max(minZ, Math.min(0.9075, 0.9075 * W / 1414));
       const root = document.querySelector('[data-theme]');
       const cs = Math.min(1, W / Z / 1558);
       if (root) {
         root.style.zoom = Z; root.style.setProperty('--pz', Z); root.style.setProperty('--cs', cs);
-        // Modern iOS Safari (16.4+) paints iframes under CSS zoom correctly, so
-        // the old "neutralize zoom (1/Z) + re-shrink via transform" workaround now
-        // double-shrinks each iframe to ~Z² — tiny and pinned to the top-left
-        // corner. Use the plain outer-zoom path everywhere (same as every other
-        // browser), which renders the hero animation and app mockup at full size.
-        root.style.setProperty('--pzi', '1');
-        root.style.setProperty('--pzs', '1');
+        // iOS WebKit degrades iframe painting under CSS zoom (blank/clipped), so
+        // each iframe sits in a wrapper that cancels the zoom (zoom: 1/Z) and
+        // re-shrinks with a transform instead — and this must run in EVERY
+        // browser so the geometry math is one code path. Note: a % -sized box
+        // inside a zoom:1/Z wrapper resolves to parent/Z units (verified in both
+        // Blink and WebKit), so %-sized wrappers also carry a calc(100% * --pzi)
+        // size compensation in the markup; fixed-px wrappers need none.
+        root.style.setProperty('--pzi', String(1 / Z));
+        root.style.setProperty('--pzs', String(Z));
         root.style.setProperty('--simw', pv ? (W / Z) + 'px' : 'calc(100vw / var(--pz, 0.9075))');
         root.style.setProperty('--bleedcap', pv ? '0px' : '-9999px');
         root.style.setProperty('--padcap', pv ? '0px' : '9999px');
