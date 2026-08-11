@@ -573,7 +573,14 @@ class Component extends DCLogic {
       const gridPages = ['projects', 'forfun', 'contact', 'resume'];
       const minZ = gridPages.includes(this.state.page) ? 0.45375 : 0.12;
       const pv = !!(this.props.phoneRatio ?? false);
-      const W = pv ? 420 : window.innerWidth;
+      // window.innerWidth is inflated by the root `zoom` on iOS Safari (and any
+      // visual-viewport browser), and that fed back into the zoom calc below so
+      // the phone breakpoint never tripped — leaving desktop-sized text on
+      // phones. documentElement.clientWidth is the true CSS viewport and is
+      // unaffected by the inner zoom. Use it; fall back to innerWidth only when
+      // the two agree (desktop, where they differ by at most a scrollbar).
+      const cw = document.documentElement.clientWidth || window.innerWidth;
+      const W = pv ? 420 : (Math.abs(window.innerWidth - cw) > 40 ? cw : window.innerWidth);
       const Z = Math.max(minZ, Math.min(0.9075, 0.9075 * W / 1414));
       const root = document.querySelector('[data-theme]');
       const cs = Math.min(1, W / Z / 1558);
