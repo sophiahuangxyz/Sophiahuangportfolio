@@ -15,8 +15,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Kelly+Slab&amp;family=IM+Fell+DW+Pica:ital@0;1&amp;display=swap" rel="stylesheet">
 <script src="./image-slot.js"></script>
 <style>
-  html, body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
-  *, *::before, *::after { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  html, body { margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
+  *, *::before, *::after { -webkit-text-size-adjust: none; text-size-adjust: none; }
   a, a *, button, button *, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"] { cursor: url('assets/cursor-hand.png') 10 3, pointer !important; }
   a { color: var(--ink, #FFFFFF); } a:hover { opacity: 0.75; }
   :root { --band-60: rgba(0,66,219,0.6); --band: #0042DB; --bg: #2F60D4; --ink: #FFFFFF; --ink-soft: rgba(255,255,255,0.8); --hero1: rgb(100,140,235); --hero2: rgb(85,131,238); --shadow: #0042DB; --box: #D9D9D9; --fruit-pos: 7.465% 45.639%; }
@@ -556,6 +556,134 @@ class Component extends DCLogic {
   }
   componentDidUpdate() { this.applyPhoneTweaks(); this.maybeInitPad(); const pv = !!(this.props.phoneRatio ?? false); if (this._onRz && (this.state.page !== this._rzPage || pv !== this._rzPv)) { this._rzPage = this.state.page; this._rzPv = pv; this._onRz(); } }
   NOTE_W = 208; NOTE_H = 200; PAPER = '#FAF19D';
+  // --- text-size repair (iOS font boosting inside CSS zoom) -----------------
+  // Some iOS Safari builds inflate text back toward its raw px size inside the
+  // zoomed layout (boxes shrink, glyphs don't → giant overlapping text), even
+  // with text-size-adjust set. Detect it by measuring real painted text against
+  // the canvas-measured expectation × ancestor zoom; only when clearly inflated,
+  // rewrite every font-size inline to (specified × Z) so the painted size lands
+  // on the design size. On healthy browsers the ratio is ~1 and this is a no-op.
+  // Debug: ?textfix=off disables, ?textfix=force applies everywhere, window.__tf
+  // holds the measured ratios.
+  _tfRecs = new Map();
+  _tfMode = null; // null = undecided, true = repairing (one-way ratchet), false = healthy (re-checked)
+  _tfParam() { try { return new URLSearchParams(location.search).get('textfix'); } catch (e) { return null; } }
+  _tfLegacy() {
+    // engines with legacy zoom semantics report zoomed computed font sizes —
+    // our measurement model is invalid there, so bail out entirely
+    if (this._tfLegacyKnown != null) return this._tfLegacyKnown;
+    if (!(window.CSS && CSS.supports && CSS.supports('zoom', '2'))) return (this._tfLegacyKnown = true);
+    const w = document.createElement('div');
+    w.style.cssText = 'position:absolute;left:-9999px;top:0;zoom:0.5';
+    const s = document.createElement('span');
+    s.style.fontSize = '40px'; s.textContent = 'x';
+    w.appendChild(s); document.body.appendChild(w);
+    const v = parseFloat(getComputedStyle(s).fontSize);
+    w.remove();
+    return (this._tfLegacyKnown = Math.abs(v - 40) > 1);
+  }
+  _tfMeasure() {
+    // probe two clusters (header is inside its own zoom: var(--ff); footer is
+    // in plain page zoom) — font boosting is per-cluster, so one probe can
+    // read healthy while another is inflated
+    const Z = this._zoom;
+    if (!Z) return null;
+    const ff = Math.max(1, 0.45375 / Z);
+    const cands = [
+      { el: document.querySelector('header span'), zf: Z * ff },
+      { el: document.querySelector('footer span'), zf: Z },
+    ];
+    const ctx = (this._tfCv || (this._tfCv = document.createElement('canvas'))).getContext('2d');
+    let worst = 0, broken = false;
+    const probes = [];
+    for (const c of cands) {
+      const el = c.el;
+      if (!el || !el.textContent) continue;
+      const rec = this._tfRecs.get(el);
+      const cs = getComputedStyle(el);
+      const base = rec ? rec.base : parseFloat(cs.fontSize);
+      if (!base) continue;
+      ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + base + 'px ' + cs.fontFamily;
+      const exp = ctx.measureText(el.textContent).width;
+      const rng = document.createRange();
+      rng.selectNodeContents(el);
+      let got = 0;
+      for (const r of rng.getClientRects()) got += r.width; // sum lines in case it wrapped
+      if (!exp || !got) continue;
+      const r = got / (exp * c.zf);
+      const B = 1 / c.zf; // predicted fully-broken ratio for this probe
+      probes.push({ fs: base, r: +r.toFixed(3), B: +B.toFixed(2) });
+      if (r > worst) worst = r;
+      // Z-aware threshold: halfway between healthy (1) and fully broken (B),
+      // floored; skip probes where the two states are indistinguishable
+      if (B >= 1.25 && r > Math.max(1.35, 1 + 0.45 * (B - 1))) broken = true;
+    }
+    if (!probes.length) return null;
+    return { broken, worst, dbg: { zoom: Z, worst: +worst.toFixed(3), probes } };
+  }
+  _tfApply() {
+    const root = document.querySelector('[data-theme]');
+    if (!root || !this._zoom) return;
+    const Z = this._zoom;
+    const ffZ = Z * Math.max(1, 0.45375 / Z); // header subtree carries zoom: var(--ff)
+    for (const el of root.querySelectorAll('*')) {
+      const tag = el.tagName;
+      if (tag === 'IFRAME' || tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CANVAS' || tag === 'IMG' || el.namespaceURI !== 'http://www.w3.org/1999/xhtml') continue;
+      let hasText = false;
+      for (const n of el.childNodes) if (n.nodeType === 3 && n.nodeValue.trim()) { hasText = true; break; }
+      if (!hasText) continue;
+      const eff = el.closest('header') ? ffZ : Z;
+      const rec = this._tfRecs.get(el);
+      const cur = el.style.fontSize;
+      if (rec && cur === rec.out && rec.z === eff) continue;
+      let base, orig;
+      if (rec && cur === rec.out) {
+        // still ours but the zoom changed: restore the original declaration
+        // (may be a var() that resolves differently now), re-read, re-repair
+        if (rec.orig) el.style.setProperty('font-size', rec.orig); else el.style.removeProperty('font-size');
+        base = parseFloat(getComputedStyle(el).fontSize);
+        orig = rec.orig;
+      } else {
+        // fresh template value (new node, or a re-render rewrote the style attr)
+        orig = el.style.getPropertyValue('font-size');
+        base = parseFloat(getComputedStyle(el).fontSize);
+      }
+      if (!base) continue;
+      el.style.fontSize = (base * eff).toFixed(2) + 'px';
+      // store the browser-serialized form (e.g. "23.80px" → "23.8px") so the
+      // skip guard's string compare survives the round-trip
+      this._tfRecs.set(el, { base, out: el.style.fontSize, z: eff, orig });
+    }
+    for (const k of this._tfRecs.keys()) if (!k.isConnected) this._tfRecs.delete(k);
+  }
+  _tfSchedule = () => {
+    if (this._tfT || this._tfDead) return;
+    // setTimeout (not rAF): must also fire in hidden/background tabs
+    this._tfT = setTimeout(() => { this._tfT = 0; this._tfRun(); }, 60);
+  };
+  _tfRun() {
+    if (this._tfDead) return;
+    const p = this._tfParam();
+    if (p === 'off' || !this._zoom) return;
+    if (this._tfMode === true) { this._tfApply(); return; }
+    if (this._tfLegacy()) return;
+    const m = this._tfMeasure();
+    if (m == null) return;
+    window.__tf = m.dbg;
+    if (p === 'force' || m.broken) {
+      this._tfMode = true; // ratchet: never flips back
+      console.info('[textfix] repairing (worst ratio ' + m.worst.toFixed(2) + ')');
+      this._tfApply();
+      setTimeout(() => {
+        if (this._tfDead) return;
+        const m2 = this._tfMeasure();
+        if (m2) { window.__tf.after = m2.dbg; console.info('[textfix] after repair: worst ' + m2.worst.toFixed(2)); }
+      }, 400);
+    } else if (this._tfMode === null) {
+      console.info('[textfix] healthy (worst ratio ' + m.worst.toFixed(2) + ')');
+      this._tfMode = false; // stays re-checkable on resize/re-render
+    } else this._tfMode = false;
+  }
   componentDidMount() {
     // browser back/forward navigates between pages (hash-based)
     const pages = ['projects', 'forfun', 'contact', 'resume', 'letterboxd', 'fusar', 'kengo', 'hands'];
@@ -653,6 +781,7 @@ class Component extends DCLogic {
       root.style.setProperty('--pd', pdOn ? 1 : 0);
       root.style.setProperty('--pdta', pdOn ? 'right' : 'left');
       if (narrow !== !!this.state.narrow) this.setState({ narrow, hamOpen: false });
+      this._tfSchedule(); // zoom changed: recompute repaired sizes, or re-check a healthy verdict
     };
     this._onRz();
     window.addEventListener('resize', this._onRz);
@@ -769,6 +898,17 @@ class Component extends DCLogic {
       }
     };
     window.addEventListener('keydown', this._onKey);
+    // text repair: decide once fonts are loaded (canvas metrics need them),
+    // then keep repaired sizes alive across re-renders via the observer
+    this._tfMo = new MutationObserver((recs) => {
+      // ignore the tagline letter physics (style.transform writes every frame)
+      if (recs.every(r => r.type === 'attributes' && r.target.nodeType === 1 && r.target.tagName === 'SPAN' && r.target.closest('h1'))) return;
+      this._tfSchedule();
+    });
+    const dcRoot = document.getElementById('dc-root');
+    if (dcRoot) this._tfMo.observe(dcRoot, { subtree: true, childList: true, attributes: true, attributeFilter: ['style'] });
+    this._tfBoot = [setTimeout(this._tfSchedule, 800), setTimeout(this._tfSchedule, 2500)]; // fallbacks: don't wait on slow font loads
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!this._tfDead) this._tfBoot.push(setTimeout(this._tfSchedule, 50)); });
   }
   makeTagline() {
     if (this._tagEls) return this._tagEls;
@@ -793,6 +933,11 @@ class Component extends DCLogic {
       p.vx = (p.vx - p.x * 0.055) * 0.88;
       p.vy = (p.vy - p.y * 0.055) * 0.88;
       p.x += p.vx; p.y += p.vy;
+      // skip redundant writes once a letter is at rest — each write is a DOM
+      // mutation that other observers (e.g. the text repair) must wake up for
+      const still = Math.abs(p.x) + Math.abs(p.y) + Math.abs(p.vx) + Math.abs(p.vy) < 0.02;
+      if (still && p._rest) continue;
+      p._rest = still;
       p.el.style.transform = 'translate(' + p.x.toFixed(2) + 'px,' + p.y.toFixed(2) + 'px)';
     }
   };
@@ -816,6 +961,10 @@ class Component extends DCLogic {
     if (this._kengoAuto) clearInterval(this._kengoAuto);
     if (this._phonePoll) clearInterval(this._phonePoll);
     cancelAnimationFrame(this._tagRaf);
+    this._tfDead = true;
+    if (this._tfMo) this._tfMo.disconnect();
+    if (this._tfT) clearTimeout(this._tfT);
+    (this._tfBoot || []).forEach(clearTimeout);
     window.removeEventListener('keydown', this._onKey);
     this.maybeInitPad();
   }

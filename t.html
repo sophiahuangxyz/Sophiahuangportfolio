@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>text diagnostic</title>
+<style>
+  html, body { margin: 0; padding: 16px; background: #14172B; color: #fff; font: 16px/1.5 ui-monospace, monospace; -webkit-text-size-adjust: none; text-size-adjust: none; }
+  .row { margin: 6px 0; word-break: break-all; }
+  .big { font-size: 22px; font-weight: bold; }
+  .ok { color: #7CFC9A; } .bad { color: #FF8A8A; }
+  #zoomtest { zoom: 0.25; }
+  #zoomtest span { font-size: 48px; white-space: nowrap; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="big">sophiahuang.net — text diagnostic</div>
+<div class="row">Take a screenshot of this whole page.</div>
+<hr>
+<div id="out"></div>
+<div id="zoomtest"><span id="probe">HAMBURGEFONSTIV 0123</span></div>
+<script>
+(function () {
+  var out = document.getElementById('out');
+  function row(label, val, cls) {
+    var d = document.createElement('div');
+    d.className = 'row' + (cls ? ' ' + cls : '');
+    d.textContent = label + ': ' + val;
+    out.appendChild(d);
+  }
+  row('UA', navigator.userAgent);
+  row('innerWidth', window.innerWidth);
+  row('clientWidth', document.documentElement.clientWidth);
+  row('screen', screen.width + ' x ' + screen.height);
+  row('visualViewport', window.visualViewport ? (Math.round(window.visualViewport.width) + ' @scale ' + window.visualViewport.scale.toFixed(2)) : 'n/a');
+  row('maxTouchPoints', navigator.maxTouchPoints);
+  row('pointer coarse', matchMedia('(pointer: coarse)').matches);
+  row('orientation landscape', matchMedia('(orientation: landscape)').matches);
+  row('body -webkit-text-size-adjust', getComputedStyle(document.body).webkitTextSizeAdjust || '(none reported)');
+  function measure() {
+    var probe = document.getElementById('probe');
+    var cs = getComputedStyle(probe);
+    var ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + parseFloat(cs.fontSize) + 'px ' + cs.fontFamily;
+    var exp = ctx.measureText(probe.textContent).width * 0.25; // container zoom
+    var rng = document.createRange();
+    rng.selectNodeContents(probe);
+    var got = 0, rects = rng.getClientRects();
+    for (var i = 0; i < rects.length; i++) got += rects[i].width;
+    var ratio = got / exp;
+    row('zoom-text expected px', exp.toFixed(1));
+    row('zoom-text painted px', got.toFixed(1));
+    row('ZOOM TEXT RATIO', ratio.toFixed(2) + (ratio > 1.5 ? '  → INFLATED (site will self-repair)' : '  → OK'), ratio > 1.5 ? 'bad big' : 'ok big');
+  }
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { setTimeout(measure, 100); }); }
+  else setTimeout(measure, 300);
+})();
+</script>
+</body>
+</html>
