@@ -586,11 +586,13 @@ class Component extends DCLogic {
       const cs = Math.min(1, W / Z / 1558);
       if (root) {
         root.style.zoom = Z; root.style.setProperty('--pz', Z); root.style.setProperty('--cs', cs);
-        // iOS WebKit doesn't paint iframes under CSS zoom: neutralize zoom locally
-        // around each iframe (zoom: 1/Z) and re-shrink with a transform instead.
-        const ios = /iP(hone|ad|od)/.test(navigator.userAgent) || (/Mac/.test(navigator.platform || '') && navigator.maxTouchPoints > 1);
-        root.style.setProperty('--pzi', ios ? String(1 / Z) : '1');
-        root.style.setProperty('--pzs', ios ? String(Z) : '1');
+        // Modern iOS Safari (16.4+) paints iframes under CSS zoom correctly, so
+        // the old "neutralize zoom (1/Z) + re-shrink via transform" workaround now
+        // double-shrinks each iframe to ~Z² — tiny and pinned to the top-left
+        // corner. Use the plain outer-zoom path everywhere (same as every other
+        // browser), which renders the hero animation and app mockup at full size.
+        root.style.setProperty('--pzi', '1');
+        root.style.setProperty('--pzs', '1');
         root.style.setProperty('--simw', pv ? (W / Z) + 'px' : 'calc(100vw / var(--pz, 0.9075))');
         root.style.setProperty('--bleedcap', pv ? '0px' : '-9999px');
         root.style.setProperty('--padcap', pv ? '0px' : '9999px');
