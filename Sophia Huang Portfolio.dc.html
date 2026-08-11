@@ -16,7 +16,10 @@
 <script src="./image-slot.js"></script>
 <style>
   html, body { margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
-  *, *::before, *::after { -webkit-text-size-adjust: none; text-size-adjust: none; }
+  /* max-height: WebKit skips text autosizing (font boosting) inside height-
+     constrained blocks — the classic hack that works even where
+     text-size-adjust is ignored; 1000000px constrains nothing real */
+  *, *::before, *::after { -webkit-text-size-adjust: none; text-size-adjust: none; max-height: 1000000px; }
   a, a *, button, button *, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"] { cursor: url('assets/cursor-hand.png') 10 3, pointer !important; }
   a { color: var(--ink, #FFFFFF); } a:hover { opacity: 0.75; }
   :root { --band-60: rgba(0,66,219,0.6); --band: #0042DB; --bg: #2F60D4; --ink: #FFFFFF; --ink-soft: rgba(255,255,255,0.8); --hero1: rgb(100,140,235); --hero2: rgb(85,131,238); --shadow: #0042DB; --box: #D9D9D9; --fruit-pos: 7.465% 45.639%; }
@@ -589,8 +592,15 @@ class Component extends DCLogic {
     const Z = this._zoom;
     if (!Z) return null;
     const ff = Math.max(1, 0.45375 / Z);
+    // body-copy probe: boosting is per text block, and big paragraph blocks
+    // get boosted when small header/footer blocks don't — sample one directly
+    let body = null;
+    for (const el of document.querySelectorAll('[data-theme] p, [data-theme] figcaption div')) {
+      if (el.textContent && el.textContent.trim().length > 20 && el.offsetParent) { body = el; break; }
+    }
     const cands = [
       { el: document.querySelector('header span'), zf: Z * ff },
+      { el: body, zf: Z },
       { el: document.querySelector('footer span'), zf: Z },
     ];
     const ctx = (this._tfCv || (this._tfCv = document.createElement('canvas'))).getContext('2d');

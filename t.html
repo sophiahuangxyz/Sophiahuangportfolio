@@ -5,20 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>text diagnostic</title>
 <style>
-  html, body { margin: 0; padding: 16px; background: #14172B; color: #fff; font: 16px/1.5 ui-monospace, monospace; -webkit-text-size-adjust: none; text-size-adjust: none; }
-  .row { margin: 6px 0; word-break: break-all; }
-  .big { font-size: 22px; font-weight: bold; }
+  html, body { margin: 0; padding: 16px; background: #14172B; color: #fff; font: 15px/1.5 ui-monospace, monospace; }
+  .row { margin: 5px 0; word-break: break-all; }
+  .big { font-size: 20px; font-weight: bold; }
   .ok { color: #7CFC9A; } .bad { color: #FF8A8A; }
-  #zoomtest { zoom: 0.25; }
-  #zoomtest span { font-size: 48px; white-space: nowrap; display: inline-block; }
+  hr { border: 0; border-top: 1px solid #3A4270; }
+  .probe { position: relative; height: 90px; overflow: hidden; opacity: 0.35; }
 </style>
 </head>
 <body>
-<div class="big">sophiahuang.net — text diagnostic</div>
-<div class="row">Take a screenshot of this whole page.</div>
+<div class="big">sophiahuang.net — text diagnostic v2</div>
+<div class="row">Screenshot this whole page (scroll if needed).</div>
 <hr>
 <div id="out"></div>
-<div id="zoomtest"><span id="probe">HAMBURGEFONSTIV 0123</span></div>
+<hr>
+<!-- probe A/B: zoomed span, computed + painted -->
+<div class="probe"><div id="zw" style="zoom:0.25"><span id="pa" style="font-size:48px; white-space:nowrap; display:inline-block">HAMBURGEFONSTIV 0123 HAMBURGEFONSTIV</span></div></div>
+<!-- probe C/D: wide block under zoom, like the real site (C: normal size, D: small inline like a repaired size) -->
+<div class="probe"><div style="zoom:0.25"><div id="wideC" style="width:1500px">
+  <span id="pc" style="font-size:53px">Letterboxd is a film social media platform that lets users log movies, rate and review films, and follow friends or critics around the world.</span>
+</div></div></div>
+<div class="probe"><div style="zoom:0.25"><div id="wideD" style="width:1500px">
+  <span id="pd" style="font-size:13px">Letterboxd is a film social media platform that lets users log movies, rate and review films, and follow friends or critics around the world.</span>
+</div></div></div>
+<!-- probe E: same wide block but with the max-height autosizing killer -->
+<div class="probe"><div style="zoom:0.25"><div id="wideE" style="width:1500px; max-height:1000000px">
+  <span id="pe" style="font-size:53px; max-height:1000000px">Letterboxd is a film social media platform that lets users log movies, rate and review films, and follow friends or critics around the world.</span>
+</div></div></div>
 <script>
 (function () {
   var out = document.getElementById('out');
@@ -28,32 +41,39 @@
     d.textContent = label + ': ' + val;
     out.appendChild(d);
   }
-  row('UA', navigator.userAgent);
-  row('innerWidth', window.innerWidth);
-  row('clientWidth', document.documentElement.clientWidth);
-  row('screen', screen.width + ' x ' + screen.height);
-  row('visualViewport', window.visualViewport ? (Math.round(window.visualViewport.width) + ' @scale ' + window.visualViewport.scale.toFixed(2)) : 'n/a');
-  row('maxTouchPoints', navigator.maxTouchPoints);
-  row('pointer coarse', matchMedia('(pointer: coarse)').matches);
-  row('orientation landscape', matchMedia('(orientation: landscape)').matches);
-  row('body -webkit-text-size-adjust', getComputedStyle(document.body).webkitTextSizeAdjust || '(none reported)');
-  function measure() {
-    var probe = document.getElementById('probe');
-    var cs = getComputedStyle(probe);
+  function paintRatio(el, zoomFactor) {
+    var cs = getComputedStyle(el);
+    var spec = parseFloat(el.style.fontSize); // the size we authored
     var ctx = document.createElement('canvas').getContext('2d');
-    ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + parseFloat(cs.fontSize) + 'px ' + cs.fontFamily;
-    var exp = ctx.measureText(probe.textContent).width * 0.25; // container zoom
+    ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + spec + 'px ' + cs.fontFamily;
+    var exp = ctx.measureText(el.textContent).width * zoomFactor;
     var rng = document.createRange();
-    rng.selectNodeContents(probe);
+    rng.selectNodeContents(el);
     var got = 0, rects = rng.getClientRects();
     for (var i = 0; i < rects.length; i++) got += rects[i].width;
-    var ratio = got / exp;
-    row('zoom-text expected px', exp.toFixed(1));
-    row('zoom-text painted px', got.toFixed(1));
-    row('ZOOM TEXT RATIO', ratio.toFixed(2) + (ratio > 1.5 ? '  → INFLATED (site will self-repair)' : '  → OK'), ratio > 1.5 ? 'bad big' : 'ok big');
+    return { r: got / exp, exp: exp, got: got };
   }
-  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { setTimeout(measure, 100); }); }
-  else setTimeout(measure, 300);
+  function verdict(label, m, note) {
+    var bad = m.r > 1.4;
+    row(label, m.r.toFixed(2) + (bad ? '  → INFLATED' : '  → OK') + (note ? ' (' + note + ')' : ''), bad ? 'bad big' : 'ok big');
+  }
+  row('UA', navigator.userAgent);
+  row('viewport', document.documentElement.clientWidth + ' x ' + document.documentElement.clientHeight + ' (inner ' + window.innerWidth + ', screen ' + screen.width + 'x' + screen.height + ')');
+  row('visualViewport', window.visualViewport ? (Math.round(window.visualViewport.width) + ' @scale ' + window.visualViewport.scale.toFixed(2)) : 'n/a');
+  row('body text-size-adjust', getComputedStyle(document.body).webkitTextSizeAdjust || '(n/a)');
+  var measured = false;
+  function measure() {
+    if (measured) return; measured = true;
+    var pa = document.getElementById('pa');
+    var caz = parseFloat(getComputedStyle(pa).fontSize);
+    row('A. computed 48px under zoom', caz + 'px' + (Math.abs(caz - 48) > 1 ? '  → LEGACY ZOOM MODEL' : '  → standard'), Math.abs(caz - 48) > 1 ? 'bad big' : 'ok big');
+    verdict('B. zoom-span paint ratio', paintRatio(pa, 0.25));
+    verdict('C. wide-block 53px ratio', paintRatio(document.getElementById('pc'), 0.25), 'site body text scenario');
+    verdict('D. wide-block 13px inline ratio', paintRatio(document.getElementById('pd'), 0.25), 'repaired-size scenario');
+    verdict('E. wide-block 53px + max-height', paintRatio(document.getElementById('pe'), 0.25), 'the deployed hack');
+  }
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { setTimeout(measure, 150); }); setTimeout(measure, 1500); }
+  else setTimeout(measure, 400);
 })();
 </script>
 </body>
