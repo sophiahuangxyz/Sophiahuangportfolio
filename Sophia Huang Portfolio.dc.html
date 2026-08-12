@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -58,6 +58,12 @@
   image-slot[data-card]::after { content: ''; position: absolute; inset: 0; background: #fff; opacity: 0; transition: opacity 0.25s ease; pointer-events: none; }
   image-slot[data-card]:hover::after { opacity: 0.2; }
 :root{--vhu:100vh}@supports(height:100dvh){:root{--vhu:100dvh}}
+  /* Pre-JS default zoom on phones: without this the first paint lays out at
+     desktop zoom (~1414px wide), iOS zooms out to fit and computes its text
+     autosizing (font boost) in that zoomed-out state — and the boost sticks
+     even after the resize handler shrinks the layout to fit. 0.24 fits the
+     narrowest phones; the JS overrides --pz on the root element immediately. */
+  @media (max-width: 707px) { html { --pz: 0.24; } }
 </style>
 </helmet>
 <div data-theme="{{ theme }}" style="zoom: 0.9075; zoom: var(--pz, 0.9075); min-height: calc(var(--vhu, 100vh) / var(--pz, 0.9075)); background: var(--bg); color: var(--ink)">
