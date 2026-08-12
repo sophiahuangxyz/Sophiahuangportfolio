@@ -680,19 +680,26 @@ class Component extends DCLogic {
     const m = this._tfMeasure();
     if (m == null) return;
     window.__tf = m.dbg;
-    if (p === 'force' || m.broken) {
+    // AUTO-REPAIR DISABLED: measured on a real iPhone (Safari 26.5, t.html
+    // probe D), iOS re-inflates small specified font sizes ~2.7x — so writing
+    // shrunken sizes is self-defeating there: the repair and the re-boost
+    // chase each other and text settles ~2-3x oversized. The same measurement
+    // (probe C) shows the template's large phone-mode sizes paint correctly
+    // untouched. Detection stays on as telemetry; ?textfix=force remains for
+    // debugging.
+    if (p === 'force') {
       this._tfMode = true; // ratchet: never flips back
-      console.info('[textfix] repairing (worst ratio ' + m.worst.toFixed(2) + ')');
+      console.info('[textfix] forced repair (worst ratio ' + m.worst.toFixed(2) + ')');
       this._tfApply();
       setTimeout(() => {
         if (this._tfDead) return;
         const m2 = this._tfMeasure();
         if (m2) { window.__tf.after = m2.dbg; console.info('[textfix] after repair: worst ' + m2.worst.toFixed(2)); }
       }, 400);
-    } else if (this._tfMode === null) {
-      console.info('[textfix] healthy (worst ratio ' + m.worst.toFixed(2) + ')');
-      this._tfMode = false; // stays re-checkable on resize/re-render
-    } else this._tfMode = false;
+    } else {
+      if (m.broken && this._tfMode === null) console.info('[textfix] inflation measured (worst ' + m.worst.toFixed(2) + ') — auto-repair intentionally off');
+      this._tfMode = false;
+    }
   }
   componentDidMount() {
     // browser back/forward navigates between pages (hash-based)

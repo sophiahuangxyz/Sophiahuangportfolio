@@ -32,6 +32,10 @@
 <div class="probe"><div style="zoom:0.25"><div id="wideE" style="width:1500px; max-height:1000000px">
   <span id="pe" style="font-size:53px; max-height:1000000px">Letterboxd is a film social media platform that lets users log movies, rate and review films, and follow friends or critics around the world.</span>
 </div></div></div>
+<!-- probe F: small inline size + the max-height killer — does the hack stop the small-size re-boost? -->
+<div class="probe"><div style="zoom:0.25"><div id="wideF" style="width:1500px; max-height:1000000px">
+  <span id="pf" style="font-size:13px; max-height:1000000px">Letterboxd is a film social media platform that lets users log movies, rate and review films, and follow friends or critics around the world.</span>
+</div></div></div>
 <script>
 (function () {
   var out = document.getElementById('out');
@@ -71,6 +75,7 @@
     verdict('C. wide-block 53px ratio', paintRatio(document.getElementById('pc'), 0.25), 'site body text scenario');
     verdict('D. wide-block 13px inline ratio', paintRatio(document.getElementById('pd'), 0.25), 'repaired-size scenario');
     verdict('E. wide-block 53px + max-height', paintRatio(document.getElementById('pe'), 0.25), 'the deployed hack');
+    verdict('F. wide-block 13px + max-height', paintRatio(document.getElementById('pf'), 0.25), 'hack vs small-size re-boost');
   }
   if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { setTimeout(measure, 150); }); setTimeout(measure, 1500); }
   else setTimeout(measure, 400);
