@@ -15,11 +15,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Kelly+Slab&amp;family=IM+Fell+DW+Pica:ital@0;1&amp;display=swap" rel="stylesheet">
 <script src="./image-slot.js"></script>
 <style>
-  html, body { margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
-  /* max-height: WebKit skips text autosizing (font boosting) inside height-
-     constrained blocks — the classic hack that works even where
-     text-size-adjust is ignored; 1000000px constrains nothing real */
-  *, *::before, *::after { -webkit-text-size-adjust: none; text-size-adjust: none; max-height: 1000000px; }
+  /* NO text-size-adjust here — measured on a real iPhone (Safari 26.5,
+     t.html): with text-size-adjust at its default (auto), text inside the
+     CSS-zoomed layout paints correctly; setting 100% or none PINS text to its
+     authored size regardless of zoom → the giant overlapping text. The
+     original export shipped 100% and it was the root cause on iPhones. */
+  html, body { margin: 0; padding: 0; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
   a, a *, button, button *, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"] { cursor: url('assets/cursor-hand.png') 10 3, pointer !important; }
   a { color: var(--ink, #FFFFFF); } a:hover { opacity: 0.75; }
   :root { --band-60: rgba(0,66,219,0.6); --band: #0042DB; --bg: #2F60D4; --ink: #FFFFFF; --ink-soft: rgba(255,255,255,0.8); --hero1: rgb(100,140,235); --hero2: rgb(85,131,238); --shadow: #0042DB; --box: #D9D9D9; --fruit-pos: 7.465% 45.639%; }
@@ -578,8 +579,11 @@ class Component extends DCLogic {
   _tfMode = null; // null = undecided, true = repairing (one-way ratchet), false = healthy (re-checked)
   _tfParam() { try { return new URLSearchParams(location.search).get('textfix'); } catch (e) { return null; } }
   _tfLegacy() {
-    // engines with legacy zoom semantics report zoomed computed font sizes —
-    // our measurement model is invalid there, so bail out entirely
+    // engines with the legacy zoom model report computed font sizes divided
+    // by the effective zoom (measured on iPad desktop-mode Safari 26.5:
+    // 48px under zoom 0.25 computes to 192px). On those engines text also
+    // paints zoom-immune — see _tfPaintImmune — and the repair must both
+    // engage and correct its base reads by the effective zoom.
     if (this._tfLegacyKnown != null) return this._tfLegacyKnown;
     if (!(window.CSS && CSS.supports && CSS.supports('zoom', '2'))) return (this._tfLegacyKnown = true);
     const w = document.createElement('div');
@@ -590,6 +594,35 @@ class Component extends DCLogic {
     const v = parseFloat(getComputedStyle(s).fontSize);
     w.remove();
     return (this._tfLegacyKnown = Math.abs(v - 40) > 1);
+  }
+  _tfPaintImmune() {
+    // Do glyphs inside the zoomed root paint at raw authored size while the
+    // LAYOUT does zoom? That's the iPadOS desktop-mode Safari bug (computed
+    // font-size reads spec/zoom, text ignores zoom — Apple forums thread
+    // 126189). Fixed-spec probes so skewed computed values can't fool the
+    // comparison; the layout-zoom box check keeps no-zoom engines (where
+    // repairing would double-shrink an unzoomed page) permanently excluded.
+    const root = document.querySelector('[data-theme]');
+    if (!root || !this._zoom) return false;
+    const Z = this._zoom;
+    const box = document.createElement('div');
+    box.style.cssText = 'position:absolute;left:0;top:0;width:100px;height:10px;visibility:hidden';
+    const s = document.createElement('span');
+    s.style.cssText = 'position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap;font-size:40px;font-family:serif';
+    s.textContent = 'MMMMMMMMMM';
+    root.appendChild(box); root.appendChild(s);
+    const layoutW = box.getBoundingClientRect().width; // ~100*Z when zoom works, ~100 when unsupported
+    const ctx = (this._tfCv || (this._tfCv = document.createElement('canvas'))).getContext('2d');
+    ctx.font = '40px serif';
+    const exp = ctx.measureText(s.textContent).width * Z;
+    const got = s.getBoundingClientRect().width;
+    box.remove(); s.remove();
+    if (!exp || !got || !layoutW) return false;
+    const zoomWorks = Math.abs(layoutW - 100 * Z) < 20 * Z;
+    const B = 1 / Z;
+    const r = got / exp;
+    window.__tf = { zoom: Z, layoutZoomWorks: zoomWorks, textPaintRatio: +r.toFixed(3) };
+    return zoomWorks && B >= 1.25 && r > 1 + 0.5 * (B - 1);
   }
   _tfMeasure() {
     // probe two clusters (header is inside its own zoom: var(--ff); footer is
@@ -665,6 +698,9 @@ class Component extends DCLogic {
         base = parseFloat(getComputedStyle(el).fontSize);
       }
       if (!base) continue;
+      // legacy zoom model: computed font sizes come back divided by the
+      // effective zoom — multiply back to recover the authored spec
+      if (this._tfLegacyKnown === true) base *= eff;
       el.style.fontSize = (base * eff).toFixed(2) + 'px';
       // store the browser-serialized form (e.g. "23.80px" → "23.8px") so the
       // skip guard's string compare survives the round-trip
@@ -682,7 +718,48 @@ class Component extends DCLogic {
     const p = this._tfParam();
     if (p === 'off' || !this._zoom) return;
     if (this._tfMode === true) { this._tfApply(); return; }
-    if (this._tfLegacy()) return;
+    if (p === 'force') {
+      // debug override — must work on every engine class, so it sits before
+      // the legacy branch
+      this._tfMode = true;
+      console.info('[textfix] forced repair');
+      this._tfApply();
+      return;
+    }
+    if (this._tfLegacy()) {
+      // iPadOS desktop-mode Safari: computed font sizes read spec/zoom and
+      // glyphs paint zoom-immune while the layout zooms (Apple forums thread
+      // 126189) — the page zoom can never size text there, so the inline
+      // rewrite is mandatory. Re-probe on every run (it's cheap and debounced)
+      // so rotation, late mounts, and near-threshold zooms re-evaluate
+      // instead of latching a stale verdict.
+      if (this._tfPaintImmune()) {
+        this._tfMode = true;
+        console.info('[textfix] zoom-immune text engine — repairing');
+        this._tfApply();
+        setTimeout(() => {
+          // convergence telemetry: measure a repaired element's painted text
+          // against its written size (≈1 = converged; >1 = re-inflated)
+          if (this._tfDead) return;
+          const span = document.querySelector('header span');
+          const rec = span && this._tfRecs.get(span);
+          if (!span || !rec) return;
+          const cs = getComputedStyle(span);
+          const ctx = this._tfCv.getContext('2d');
+          ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + parseFloat(rec.out) + 'px ' + cs.fontFamily;
+          const exp = ctx.measureText(span.textContent).width;
+          const rng = document.createRange();
+          rng.selectNodeContents(span);
+          let got = 0;
+          for (const r of rng.getClientRects()) got += r.width;
+          if (exp && got) {
+            if (window.__tf) window.__tf.afterRepair = +(got / exp).toFixed(3);
+            console.info('[textfix] post-repair ratio ' + (got / exp).toFixed(2));
+          }
+        }, 400);
+      }
+      return;
+    }
     const m = this._tfMeasure();
     if (m == null) return;
     window.__tf = m.dbg;
@@ -693,19 +770,8 @@ class Component extends DCLogic {
     // (probe C) shows the template's large phone-mode sizes paint correctly
     // untouched. Detection stays on as telemetry; ?textfix=force remains for
     // debugging.
-    if (p === 'force') {
-      this._tfMode = true; // ratchet: never flips back
-      console.info('[textfix] forced repair (worst ratio ' + m.worst.toFixed(2) + ')');
-      this._tfApply();
-      setTimeout(() => {
-        if (this._tfDead) return;
-        const m2 = this._tfMeasure();
-        if (m2) { window.__tf.after = m2.dbg; console.info('[textfix] after repair: worst ' + m2.worst.toFixed(2)); }
-      }, 400);
-    } else {
-      if (m.broken && this._tfMode === null) console.info('[textfix] inflation measured (worst ' + m.worst.toFixed(2) + ') — auto-repair intentionally off');
-      this._tfMode = false;
-    }
+    if (m.broken && this._tfMode === null) console.info('[textfix] inflation measured (worst ' + m.worst.toFixed(2) + ') — auto-repair intentionally off');
+    this._tfMode = false;
   }
   componentDidMount() {
     // browser back/forward navigates between pages (hash-based)
