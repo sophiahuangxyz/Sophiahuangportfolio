@@ -80,7 +80,7 @@ class Component extends DCLogic {
       const soundOn = this.props.sound ?? true;
       if (soundOn) {
         if (!this.ac) this.makeAudio();
-        if (this.ac && this.ac.state === 'suspended') this.ac.resume();
+        if (this.ac && this.ac.state !== 'running') { try { this.ac.resume(); } catch (err) {} }
       }
       this.thump(0.65);
       this.onMove(e);
@@ -89,12 +89,18 @@ class Component extends DCLogic {
     this.onResume = () => {
       if (!(this.props.sound ?? true)) return;
       if (!this.ac) this.makeAudio();
-      if (this.ac && this.ac.state === 'suspended') this.ac.resume();
+      // resume whenever not running — iOS can also report 'interrupted'
+      if (this.ac && this.ac.state !== 'running') { try { this.ac.resume(); } catch (err) {} }
     };
     this.onVis = () => { if (this.au && this.ac) this.au.rustle.gain.setTargetAtTime(0, this.ac.currentTime, 0.05); };
     window.addEventListener('pointermove', this.onMove, { passive: true });
     cv.addEventListener('pointerdown', this.onDown);
     window.addEventListener('pointerdown', this.onResume);
+    // iOS unlocks WebAudio reliably only from touchend/click gestures —
+    // pointerdown alone can leave the context suspended forever on iPhone and
+    // iPad (the main page wakes its own click-sound context the same way)
+    window.addEventListener('touchend', this.onResume, { passive: true });
+    window.addEventListener('click', this.onResume, true);
     window.addEventListener('pointerup', this.onUp);
     document.addEventListener('visibilitychange', this.onVis);
     this.onFruitClick = () => {
@@ -115,6 +121,8 @@ class Component extends DCLogic {
     window.removeEventListener('pointermove', this.onMove);
     if (this.canvasRef.current) this.canvasRef.current.removeEventListener('pointerdown', this.onDown);
     window.removeEventListener('pointerdown', this.onResume);
+    window.removeEventListener('touchend', this.onResume);
+    window.removeEventListener('click', this.onResume, true);
     window.removeEventListener('pointerup', this.onUp);
     document.removeEventListener('visibilitychange', this.onVis);
     window.removeEventListener('sh-fruit-click', this.onFruitClick);
