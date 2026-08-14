@@ -172,7 +172,10 @@ class Component extends DCLogic {
     c2.connect(fC2); fC2.connect(gC2); gC2.connect(rustle);
     const recGain = ac.createGain(); recGain.gain.value = 0; recGain.connect(rustle);
     this.au = { rustle, pan, gSw, fSw, c1, gC1, fC1, c2, gC2, fC2, recGain, master };
-    fetch('assets/blanket-rustle.mp4')
+    // audio-only mp3s — the original .mp4 screen recordings decode on desktop
+    // browsers but iOS/iPadOS decodeAudioData rejects video containers (total
+    // silence on iPhone/iPad); mp3 decodes everywhere and is ~20x smaller
+    fetch('assets/blanket-rustle.mp3')
       .then((r) => { if (!r.ok) throw new Error('fetch ' + r.status); return r.arrayBuffer(); })
       .then((ab) => new Promise((res, rej) => ac.decodeAudioData(ab, res, rej)))
       .then((buf) => {
@@ -182,7 +185,7 @@ class Component extends DCLogic {
         this.au.rec = src;
       })
       .catch((e) => console.error('blanket recording unavailable, using synth', e));
-    fetch('assets/blanket-press.mp4')
+    fetch('assets/blanket-press.mp3')
       .then((r) => { if (!r.ok) throw new Error('fetch ' + r.status); return r.arrayBuffer(); })
       .then((ab) => new Promise((res, rej) => ac.decodeAudioData(ab, res, rej)))
       .then((buf) => { this.au.pressBuf = buf; })
@@ -197,9 +200,12 @@ class Component extends DCLogic {
     const tgt = on ? Math.min(1, Math.pow(sp, 0.55) * 1.15) : 0;
     a.rustle.gain.setTargetAtTime(tgt, t, tgt > (this._lg || 0) ? 0.035 : 0.16);
     this._lg = tgt;
-    a.gSw.gain.setTargetAtTime(0, t, 0.1);
-    a.gC1.gain.setTargetAtTime(0, t, 0.1);
-    a.gC2.gain.setTargetAtTime(0, t, 0.1);
+    // recording loaded: synth stays out of the mix; recording missing (decode
+    // failed) the synth carries the rustle instead of leaving the site mute
+    const synth = a.rec || !on ? 0 : Math.pow(sp, 0.55);
+    a.gSw.gain.setTargetAtTime(synth * 0.5, t, 0.1);
+    a.gC1.gain.setTargetAtTime(synth * 0.6, t, 0.1);
+    a.gC2.gain.setTargetAtTime(synth * 0.45, t, 0.1);
     if (a.rec) {
       a.recGain.gain.setTargetAtTime(on ? Math.min(1, Math.pow(sp, 0.55) * 1.2) * 1.35 : 0, t, 0.07);
       a.rec.playbackRate.setTargetAtTime(0.85 + sp * 0.4, t, 0.15);
