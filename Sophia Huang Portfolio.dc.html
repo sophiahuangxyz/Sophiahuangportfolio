@@ -106,7 +106,7 @@
             <sc-if value="{{ showClickHint }}" hint-placeholder-val="{{ true }}">
               <div style="{{ clickHintStyle }}"><span style="position: absolute; left: 155px; top: 33px; transform: scale(var(--ffhero, 1)); transform-origin: -113px -17px; font-family: 'Kelly Slab', serif; font-size: 24px; line-height: 100%">Hey, click me!</span></div>
             </sc-if>
-            <h1 onMouseMove="{{ tagMove }}" onPointerDown="{{ tagDown }}" style="position: absolute; top: calc(345px + 125px * var(--pd, 0)); right: 79px; width: 1218px; margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: 43px; line-height: 125%; text-align: right; pointer-events: auto; height: 201px">{{ taglineLetters }}</h1>
+            <h1 onMouseMove="{{ tagMove }}" onPointerDown="{{ tagDown }}" style="position: absolute; top: calc(345px + 95px * var(--pd, 0)); right: 79px; width: 1218px; margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: 43px; line-height: 125%; text-align: right; pointer-events: auto; height: 201px">{{ taglineLetters }}</h1>
           </div>
         </div>
                 <div style="position: relative; z-index: 1; margin-top: -2px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg); display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; padding: 64px max(var(--gutter, 34px), min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 745px))) 60px; align-items: flex-start">
@@ -839,7 +839,7 @@ class Component extends DCLogic {
       if (W < 682) {
         hs = W / 682;
         herocolw = (682 / 0.45375).toFixed(1) + 'px';
-        heroextra = Math.min(80, Math.round((1 - hs) * 220)) + 'px';
+        heroextra = Math.min(110, Math.round((1 - hs) * 260)) + 'px';
       }
       this._heroScale = hs;
       const ff = Math.max(1, 0.45375 / Z);
@@ -987,6 +987,12 @@ class Component extends DCLogic {
       }
     };
     window.addEventListener('keydown', this._onKey);
+    // touch: the tagline h1 only receives mousemove (desktop); drive the same
+    // letter physics from window-level pointer moves for touch/pen so dragging
+    // across the blanket pushes the letters on phones and iPads too — the
+    // desktop mouse path stays exactly as it was (element-scoped mousemove)
+    this._tagTouchMove = (e) => { if (e.pointerType === 'mouse') return; this.tagMove(e); };
+    window.addEventListener('pointermove', this._tagTouchMove, { passive: true });
     // text repair: decide once fonts are loaded (canvas metrics need them),
     // then keep repaired sizes alive across re-renders via the observer
     this._tfMo = new MutationObserver((recs) => {
@@ -1050,6 +1056,7 @@ class Component extends DCLogic {
     if (this._kengoAuto) clearInterval(this._kengoAuto);
     if (this._phonePoll) clearInterval(this._phonePoll);
     cancelAnimationFrame(this._tagRaf);
+    if (this._tagTouchMove) window.removeEventListener('pointermove', this._tagTouchMove);
     this._tfDead = true;
     if (this._tfMo) this._tfMo.disconnect();
     if (this._tfT) clearTimeout(this._tfT);
