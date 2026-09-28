@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Kelly+Slab&amp;family=IM+Fell+DW+Pica:ital@0;1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kelly+Slab&amp;family=IM+Fell+DW+Pica:ital@0;1&amp;family=DM+Sans:wght@500;700&amp;display=swap" rel="stylesheet">
 <script src="./image-slot.js"></script>
 <style>
   /* NO text-size-adjust here — measured on a real iPhone (Safari 26.5,
@@ -20,19 +20,22 @@
      CSS-zoomed layout paints correctly; setting 100% or none PINS text to its
      authored size regardless of zoom → the giant overlapping text. The
      original export shipped 100% and it was the root cause on iPhones. */
-  html, body { margin: 0; padding: 0; background: #2F60D4; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; overscroll-behavior-y: none; cursor: url('assets/cursor-arrow.png') 1 0, auto; }
   a, a *, button, button *, [role="button"], [style*="cursor: pointer"], [style*="cursor:pointer"] { cursor: url('assets/cursor-hand.png') 10 3, pointer !important; }
-  a { color: var(--ink, #FFFFFF); } a:hover { opacity: 0.75; }
-  :root { --band-60: rgba(0,66,219,0.6); --band: #0042DB; --bg: #2F60D4; --ink: #FFFFFF; --ink-soft: rgba(255,255,255,0.8); --hero1: rgb(100,140,235); --hero2: rgb(85,131,238); --shadow: #0042DB; --box: #D9D9D9; --fruit-pos: 7.465% 45.639%; }
-  [data-theme="peach"] { --fruit-bright: 1.09; --band-60: rgba(239,172,173,0.6); --band: #EFACAC; --bg: #FFEEDA; --ink: #9C0E1E; --ink-soft: rgba(156,14,30,0.8); --hero1: rgb(255,238,218); --hero2: rgb(251,222,207); --shadow: rgba(156,14,30,0.7); --fruit-pos: 95.645% 46.202%; }
-  @property --band { syntax: '<color>'; inherits: true; initial-value: #0042DB; }
-  @property --band-60 { syntax: '<color>'; inherits: true; initial-value: rgba(0,66,219,0.6); }
-  @property --bg { syntax: '<color>'; inherits: true; initial-value: #2F60D4; }
-  @property --ink { syntax: '<color>'; inherits: true; initial-value: #FFFFFF; }
-  @property --ink-soft { syntax: '<color>'; inherits: true; initial-value: rgba(255,255,255,0.8); }
+  a { color: var(--ink, #000000); } a:hover { opacity: 0.75; }
+  [data-theme], [data-theme] [style*="background: var(--bg)"], [data-theme] [data-paper] { background: linear-gradient(color-mix(in srgb, var(--bg) 70%, transparent), color-mix(in srgb, var(--bg) 70%, transparent)), url('assets/paper-texture.webp') 0 0 / 1300px auto repeat, var(--bg) !important; }
+  [data-theme] header, [data-theme] footer { background: linear-gradient(color-mix(in srgb, var(--band) 70%, transparent), color-mix(in srgb, var(--band) 70%, transparent)), url('assets/paper-texture.webp') 0 0 / 1300px auto repeat, var(--band) !important; }
+  [data-theme] img:not([src$=".svg"]):not([alt=""]):not(#bloom-logo):not(#bloom-mockup img), [data-theme] image-slot, [data-theme] video { box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  :root { --band-60: rgba(0,0,0,0.25); --band: #FFFFFF; --bg: #FFFFFF; --ink: #000000; --ink-soft: rgba(0,0,0,0.75); --hero1: #FFFFFF; --hero2: #FFFFFF; --shadow: rgba(0,0,0,0.25); --box: #D9D9D9; --fruit-pos: 7.465% 45.639%; }
+  [aria-label="switch color theme"] { display: none !important; }
+  @property --band { syntax: '<color>'; inherits: true; initial-value: #FFFFFF; }
+  @property --band-60 { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,0.25); }
+  @property --bg { syntax: '<color>'; inherits: true; initial-value: #FFFFFF; }
+  @property --ink { syntax: '<color>'; inherits: true; initial-value: #000000; }
+  @property --ink-soft { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,0.75); }
   @property --hero1 { syntax: '<color>'; inherits: true; initial-value: rgb(100,140,235); }
   @property --hero2 { syntax: '<color>'; inherits: true; initial-value: rgb(85,131,238); }
-  @property --shadow { syntax: '<color>'; inherits: true; initial-value: #0042DB; }
+  @property --shadow { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,0.25); }
   @property --fruit-bright { syntax: '<number>'; inherits: true; initial-value: 1; }
   [data-theme] { transition: --band 0.45s ease, --band-60 0.45s ease, --bg 0.45s ease, --ink 0.45s ease, --ink-soft 0.45s ease, --hero1 0.45s ease, --hero2 0.45s ease, --shadow 0.45s ease, --fruit-bright 0.45s ease; }
   @keyframes peel-pop {
@@ -58,6 +61,10 @@
   image-slot[data-card] { position: relative; }
   image-slot[data-card]::after { content: ''; position: absolute; inset: 0; background: #fff; opacity: 0; transition: opacity 0.25s ease; pointer-events: none; }
   image-slot[data-card]:hover::after { opacity: 0.2; }
+.bwrap:has(.bp-j:hover) .bp-h, .bwrap:has(.bp-j:hover) .bp-f, .bwrap:has(.bp-h:hover) .bp-j, .bwrap:has(.bp-h:hover) .bp-f, .bwrap:has(.bp-f:hover) .bp-j, .bwrap:has(.bp-f:hover) .bp-h { opacity: 0.42; }
+  .bwrap:has(.bp-j:hover) .bp-h .onb, .bwrap:has(.bp-j:hover) .bp-f .onb, .bwrap:has(.bp-h:hover) .bp-j .onb, .bwrap:has(.bp-h:hover) .bp-f .onb, .bwrap:has(.bp-f:hover) .bp-j .onb, .bwrap:has(.bp-f:hover) .bp-h .onb { opacity: 1; }
+  .bwrap:has(.bp-j:hover) .bt-h, .bwrap:has(.bp-j:hover) .bt-f, .bwrap:has(.bp-h:hover) .bt-j, .bwrap:has(.bp-h:hover) .bt-f, .bwrap:has(.bp-f:hover) .bt-h, .bwrap:has(.bp-f:hover) .bt-j { opacity: 0.45; }
+  .bwrap:has(.bp-j:hover) .bt-j, .bwrap:has(.bp-h:hover) .bt-h, .bwrap:has(.bp-f:hover) .bt-f { order: 0; }
 :root{--vhu:100vh}@supports(height:100dvh){:root{--vhu:100dvh}}
   /* Pre-JS default zoom on phones: without this the first paint lays out at
      desktop zoom (~1414px wide), iOS zooms out to fit and computes its text
@@ -67,10 +74,10 @@
   @media (max-width: 707px) { html { --pz: 0.24; } }
 </style>
 </helmet>
-<div data-theme="{{ theme }}" style="zoom: 0.9075; zoom: var(--pz, 0.9075); min-height: calc(var(--vhu, 100vh) / var(--pz, 0.9075)); background: var(--bg); color: var(--ink)">
+<div data-theme="{{ theme }}" style="overflow-x: clip; zoom: 0.9075; zoom: var(--pz, 0.9075); min-height: calc(var(--vhu, 100vh) / var(--pz, 0.9075)); background: var(--bg); color: var(--ink)">
   <div style="width: min(1558px, var(--simw, calc(100vw / var(--pz, 0.9075)))); margin: 0 auto; position: relative">
-    <header style="position: sticky; top: 0; zoom: var(--ff, 1); margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); box-sizing: border-box; z-index: 30; height: 107px; background: var(--band); display: flex; align-items: center; justify-content: space-between; padding: 0 max(48px, min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 731px)))">
-      <span onClick="{{ goProjects }}" style="font-family: 'IM Fell DW Pica', serif; font-size: 56px; line-height: 100%; cursor: pointer">SOPHIA HUANG</span>
+    <header style="position: sticky; top: 0; zoom: var(--ff, 1); margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); box-sizing: border-box; z-index: 30; height: 107px; background: var(--band); box-shadow: 0 4px 10px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: space-between; padding: 0 max(48px, min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 731px)))">
+      <span onClick="{{ goProjects }}" style="font-family: 'IM Fell DW Pica', serif; font-size: 56px; line-height: 100%; cursor: pointer; width: 484px; height: 35px">SOPHIA HUANG</span>
       <sc-if value="{{ notNarrow }}" hint-placeholder-val="{{ true }}">
       <nav style="display: flex; gap: 54px; font-family: 'Kelly Slab', serif; font-size: 36px; line-height: 100%">
         <span onClick="{{ goProjects }}" style="cursor: pointer; transition: opacity 0.35s ease; opacity: {{ navOpProjects }}" style-hover="opacity: 0.55">Projects</span>
@@ -99,31 +106,39 @@
     </header>
         <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ true }}">
       <section data-screen-label="Projects" style="background: var(--bg)">
-        <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); height: calc(538px * var(--heroscale, 1) + var(--heroextra, 0px)); overflow: hidden; z-index: 0; box-sizing: border-box; background: radial-gradient(1021px 814px at 78.59% 41.03%, var(--hero1) 0%, var(--hero2) 100%)">
-          <dc-import name="Blanket" peach="{{ peachNum }}" blue-shadow="{{ blueShadow }}" blue-highlight="{{ blueHighlight }}" peach-shadow="{{ peachShadow }}" peach-highlight="{{ peachHighlight }}" peach-sheen="{{ peachSheen }}" hint-size="100%,538px" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%"></dc-import>
-          <div style="position: absolute; left: 0; top: 0; transform: scale(var(--heroscale, 1)); transform-origin: top left; width: var(--herocolw, 100%); height: 100%; pointer-events: none">
-            <div style="position: absolute; left: 42px; top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ffhero, 1)); transform-origin: top left; transition: transform 0.2s ease; pointer-events: auto" style-hover="transform: scale(calc(var(--ffhero, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
-            <sc-if value="{{ showClickHint }}" hint-placeholder-val="{{ true }}">
-              <div style="{{ clickHintStyle }}"><span style="position: absolute; left: 155px; top: 33px; transform: scale(var(--ffhero, 1)); transform-origin: -113px -17px; font-family: 'Kelly Slab', serif; font-size: 24px; line-height: 100%">Hey, click me!</span></div>
-            </sc-if>
-            <h1 onMouseMove="{{ tagMove }}" onPointerDown="{{ tagDown }}" style="position: absolute; top: calc(345px + 95px * var(--pd, 0)); right: 79px; width: 1218px; margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: 43px; line-height: 125%; text-align: right; pointer-events: auto; height: 201px">{{ taglineLetters }}</h1>
+        <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); height: calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 107px); overflow: hidden; z-index: 0; box-sizing: border-box; background: #FFFBF8">
+          <div style="position: absolute; inset: 0; background: url('assets/paper-texture.webp') center / cover no-repeat; opacity: 0.3; pointer-events: none"></div>
+          <div style="position: absolute; left: 0; right: 0; top: calc(204px * var(--ff, 1)); display: flex; flex-direction: column; align-items: center; gap: calc(8px * var(--ff, 1)); text-align: center; color: #000000">
+            <div style="font-family: 'Kelly Slab', serif; font-size: calc(36px * var(--ff, 1)); line-height: 120%">Sophia Huang is a...</div>
+            <h1 style="margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: calc(50px * var(--ff, 1)); line-height: 110%; letter-spacing: 0.5px">PRODUCT DESIGNER</h1>
           </div>
+          <div data-paper="1" style="position: absolute; left: -0.5%; top: calc(330px * var(--ff, 1)); width: 72%; height: 1600px; background: #FFFFFF; transform: rotate(1.3deg); transform-origin: 0 0; box-shadow: 0 -3px 8px rgba(0,0,0,0.25); opacity: calc(1 - var(--sp, 0))"></div>
         </div>
-                <div style="position: relative; z-index: 1; margin-top: -2px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg); display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; padding: 64px max(var(--gutter, 34px), min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 745px))) 60px; align-items: flex-start">
+        <div id="sheet-wrap" style="position: relative; z-index: 1; margin-top: calc(260px * var(--ff, 1) + 107px - var(--vhu, 100vh) / var(--pz, 0.9075) + var(--lift, 0px)); margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))">
+        <div data-paper="1" style="position: sticky; top: var(--sheett, 0px); background: #FFFFFF; box-shadow: 0 -3px 8px rgba(0,0,0,0.25); transform-origin: 0 0; transform: translateX(calc(23% * (1 - var(--sp, 0)))) rotate(calc(8.9deg * (1 - var(--sp, 0)))) scale(calc(0.8 + 0.2 * var(--sp, 0))); will-change: transform">
+          <h2 style="margin: 0 auto; box-sizing: border-box; width: min(100%, var(--gridw, 1489px)); padding: calc(64px * var(--ff, 1)) 0 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: calc(56px * var(--ff, 1)); line-height: 100%; letter-spacing: 1px">PROJECTS</h2>
+                <div style="position: relative; z-index: 1; background: transparent; display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; padding: 40px max(var(--gutter, 34px), min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 745px))) 60px; align-items: flex-start">
           <sc-if value="{{ grid3 }}" hint-placeholder-val="{{ true }}">
           <div style="display: flex; flex-direction: column; gap: 24px; width: var(--cardw, 475px)">
             <figure style="margin: 0">
+              <image-slot data-card="1" id="proj-letterboxd" src="assets/slots/proj-letterboxd.webp" shape="rect" placeholder="Letterboxd Redesign — drop image" onClickCapture="{{ lbCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Letterboxd: Concept Exploration</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App, Logo Redesign | Summer 2026</div>
+              </figcaption>
+            </figure><figure style="margin: 0">
               <a href="https://www.seawagyuhouse.com/" target="_blank" rel="noopener" style="display: block; text-decoration: none"><image-slot data-card="1" id="proj-sea-wagyu" src="assets/slots/proj-sea-wagyu.webp" shape="rect" placeholder="Sea Wagyu House — drop image" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot></a>
               <figcaption style="margin-top: 16px">
                 <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House</div>
                 <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Website | Summer 2026</div>
               </figcaption>
             </figure>
+            
             <figure style="margin: 0">
-              <image-slot data-card="1" id="proj-vsco" src="assets/slots/proj-vsco.webp" shape="rect" placeholder="VSCO Redesign — drop image" onClickCapture="{{ vscoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 475; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <image-slot data-card="1" id="proj-invisable-hands" src="assets/slots/proj-invisable-hands.webp" shape="rect" placeholder="Our Invisable Hands — drop image" onClickCapture="{{ handsCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 309; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
               <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House Drinks</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Alcohol Menu | Summer 2026</div>
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Our Invisable Hands</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Magazine | Spring 2026</div>
               </figcaption>
             </figure>
           </div>
@@ -136,22 +151,6 @@
               </figcaption>
             </figure>
             <figure style="margin: 0">
-              <image-slot data-card="1" id="proj-invisable-hands" src="assets/slots/proj-invisable-hands.webp" shape="rect" placeholder="Our Invisable Hands — drop image" onClickCapture="{{ handsCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 309; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
-              <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Our Invisable Hands</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Magazine | Spring 2026</div>
-              </figcaption>
-            </figure>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 24px; width: var(--cardw, 475px)">
-            <figure style="margin: 0">
-              <image-slot data-card="1" id="proj-letterboxd" src="assets/slots/proj-letterboxd.webp" shape="rect" placeholder="Letterboxd Redesign — drop image" onClickCapture="{{ lbCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
-              <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Letterboxd: Concept Exploration</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App, Logo Redesign | Summer 2026</div>
-              </figcaption>
-            </figure>
-            <figure style="margin: 0">
               <image-slot data-card="1" id="proj-kengo-kuma" src="assets/slots/proj-kengo-kuma.webp" shape="rect" placeholder="Kengo Kuma Architecture — drop image" onClickCapture="{{ kengoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
               <figcaption style="margin-top: 16px">
                 <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Kengo Kuma Architecture</div>
@@ -159,28 +158,51 @@
               </figcaption>
             </figure>
           </div>
+          <div style="display: flex; flex-direction: column; gap: 24px; width: var(--cardw, 475px)">
+            <figure style="margin: 0">
+              <image-slot data-card="1" id="proj-bloom" src="assets/slots/proj-bloom.jpg" shape="rect" placeholder="Bloom — drop image" onClickCapture="{{ bloomCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Bloom</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App | Summer 2026</div>
+              </figcaption>
+            </figure>
+            <figure style="margin: 0">
+              <image-slot data-card="1" id="proj-vsco" src="assets/slots/proj-vsco.webp" shape="rect" placeholder="VSCO Redesign — drop image" onClickCapture="{{ vscoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 475; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House Drinks</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Alcohol Menu | Summer 2026</div>
+              </figcaption>
+            </figure>
+          </div>
           </sc-if>
           <sc-if value="{{ grid2 }}" hint-placeholder-val="{{ false }}">
           <div style="display: flex; flex-direction: column; gap: 24px; width: var(--cardw, 475px)">
-            <figure style="margin: 0">
-              <a href="https://www.seawagyuhouse.com/" target="_blank" rel="noopener" style="display: block; text-decoration: none"><image-slot src="assets/slots/proj-sea-wagyu.webp" data-card="1" id="proj-sea-wagyu" shape="rect" placeholder="Sea Wagyu House — drop image" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot></a>
-              <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Website | Summer 2026</div>
-              </figcaption>
-            </figure>
             <figure style="margin: 0">
               <image-slot src="assets/slots/proj-letterboxd.webp" data-card="1" id="proj-letterboxd" shape="rect" placeholder="Letterboxd Redesign — drop image" onClickCapture="{{ lbCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
               <figcaption style="margin-top: 16px">
                 <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Letterboxd Redesign</div>
                 <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App, Logo | Summer 2026</div>
               </figcaption>
+            </figure><figure style="margin: 0">
+              <a href="https://www.seawagyuhouse.com/" target="_blank" rel="noopener" style="display: block; text-decoration: none"><image-slot data-card="1" id="proj-sea-wagyu" src="assets/slots/proj-sea-wagyu.webp" shape="rect" placeholder="Sea Wagyu House — drop image" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot></a>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Website | Summer 2026</div>
+              </figcaption>
+            </figure>
+            
+            <figure style="margin: 0">
+              <image-slot data-card="1" id="proj-bloom" src="assets/slots/proj-bloom.jpg" shape="rect" placeholder="Bloom — drop image" onClickCapture="{{ bloomCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Bloom</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App | Summer 2026</div>
+              </figcaption>
             </figure>
             <figure style="margin: 0">
-              <image-slot src="assets/slots/proj-vsco.webp" data-card="1" id="proj-vsco" shape="rect" placeholder="VSCO Redesign — drop image" onClickCapture="{{ vscoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 475; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <image-slot src="assets/slots/proj-invisable-hands.webp" data-card="1" id="proj-invisable-hands" shape="rect" placeholder="Our Invisable Hands — drop image" onClickCapture="{{ handsCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 309; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
               <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House Drinks</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Alcohol Menu | Summer 2026</div>
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Our Invisable Hands</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Magazine | Spring 2026</div>
               </figcaption>
             </figure>
           </div>
@@ -193,17 +215,17 @@
               </figcaption>
             </figure>
             <figure style="margin: 0">
+              <image-slot src="assets/slots/proj-vsco.webp" data-card="1" id="proj-vsco" shape="rect" placeholder="VSCO Redesign — drop image" onClickCapture="{{ vscoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 475; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House Drinks</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Alcohol Menu | Summer 2026</div>
+              </figcaption>
+            </figure>
+            <figure style="margin: 0">
               <image-slot src="assets/slots/proj-kengo-kuma.webp" data-card="1" id="proj-kengo-kuma" shape="rect" placeholder="Kengo Kuma Architecture — drop image" onClickCapture="{{ kengoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
               <figcaption style="margin-top: 16px">
                 <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Kengo Kuma Architecture</div>
                 <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Pamphlet | Spring 2026</div>
-              </figcaption>
-            </figure>
-            <figure style="margin: 0">
-              <image-slot src="assets/slots/proj-invisable-hands.webp" data-card="1" id="proj-invisable-hands" shape="rect" placeholder="Our Invisable Hands — drop image" onClickCapture="{{ handsCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 309; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
-              <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Our Invisable Hands</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Magazine | Spring 2026</div>
               </figcaption>
             </figure>
           </div>
@@ -211,10 +233,10 @@
           <sc-if value="{{ grid1 }}" hint-placeholder-val="{{ false }}">
           <div style="display: flex; flex-direction: column; gap: 24px; width: var(--cardw, 475px)">
             <figure style="margin: 0">
-              <image-slot src="assets/slots/proj-letterboxd.webp" data-card="1" id="proj-letterboxd" shape="rect" placeholder="Letterboxd Redesign — drop image" onClickCapture="{{ lbCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <image-slot data-card="1" id="proj-bloom" src="assets/slots/proj-bloom.jpg" shape="rect" placeholder="Bloom — drop image" onClickCapture="{{ bloomCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
               <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Letterboxd Redesign</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App, Logo | Summer 2026</div>
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Bloom</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App | Summer 2026</div>
               </figcaption>
             </figure>
             <figure style="margin: 0">
@@ -225,10 +247,24 @@
               </figcaption>
             </figure>
             <figure style="margin: 0">
-              <a href="https://www.seawagyuhouse.com/" target="_blank" rel="noopener" style="display: block; text-decoration: none"><image-slot src="assets/slots/proj-sea-wagyu.webp" data-card="1" id="proj-sea-wagyu" shape="rect" placeholder="Sea Wagyu House — drop image" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot></a>
+              <image-slot src="assets/slots/proj-letterboxd.webp" data-card="1" id="proj-letterboxd" shape="rect" placeholder="Letterboxd Redesign — drop image" onClickCapture="{{ lbCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Letterboxd Redesign</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">App, Logo | Summer 2026</div>
+              </figcaption>
+            </figure>            <figure style="margin: 0">
+              <a href="https://www.seawagyuhouse.com/" target="_blank" rel="noopener" style="display: block; text-decoration: none"><image-slot data-card="1" id="proj-sea-wagyu" src="assets/slots/proj-sea-wagyu.webp" shape="rect" placeholder="Sea Wagyu House — drop image" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 356; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot></a>
               <figcaption style="margin-top: 16px">
                 <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House</div>
                 <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Website | Summer 2026</div>
+              </figcaption>
+            </figure>
+            
+            <figure style="margin: 0">
+              <image-slot src="assets/slots/proj-vsco.webp" data-card="1" id="proj-vsco" shape="rect" placeholder="VSCO Redesign — drop image" onClickCapture="{{ vscoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 475; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
+              <figcaption style="margin-top: 16px">
+                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House Drinks</div>
+                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Alcohol Menu | Summer 2026</div>
               </figcaption>
             </figure>
             <figure style="margin: 0">
@@ -236,13 +272,6 @@
               <figcaption style="margin-top: 16px">
                 <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Kengo Kuma Architecture</div>
                 <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Pamphlet | Spring 2026</div>
-              </figcaption>
-            </figure>
-            <figure style="margin: 0">
-              <image-slot src="assets/slots/proj-vsco.webp" data-card="1" id="proj-vsco" shape="rect" placeholder="VSCO Redesign — drop image" onClickCapture="{{ vscoCardClick }}" style="display: block; width: var(--cardw, 475px); aspect-ratio: 475 / 475; height: auto; background: var(--box); box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer"></image-slot>
-              <figcaption style="margin-top: 16px">
-                <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Sea Wagyu House Drinks</div>
-                <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Alcohol Menu | Summer 2026</div>
               </figcaption>
             </figure>
             <figure style="margin: 0">
@@ -255,18 +284,21 @@
           </div>
           </sc-if>
         </div>
+        </div>
+        <div style="height: var(--holdh, 0px)"></div>
+        </div>
       </section>
     </sc-if>
     <sc-if value="{{ isHands }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="Our Invisable Hands Project" style="position: relative; height: max(calc(1150px + 120px * var(--ff, 1) + 1510px * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)); background: var(--bg)">
-        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
-        <h1 style="position: absolute; left: calc(809px - 699px * var(--pd, 0)); top: calc(52px * (1 - var(--pd, 0)) + (39px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 640px * var(--pd, 0)); text-align: var(--pdta, left); margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: var(--tfs52, 52px); line-height: 120%">Our Invisable Hands</h1>
-        <div id="hands-carousel" onPointerDown="{{ handsDown }}" onPointerUp="{{ handsUp }}" onPointerLeave="{{ handsLeave }}" style="touch-action: none; position: absolute; left: calc(42px + 68px * var(--pd, 0)); top: calc(36px + 120px * var(--ff, 1) + 230px * var(--pd, 0)); width: calc(980px + 360px * var(--pd, 0)); height: calc(653px + 240px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
+      <section data-screen-label="Our Invisable Hands Project" data-fit-text="1" style="position: relative; height: calc(max(calc(616px + 120px * var(--ff, 1) + 2140px * var(--pd, 0) - 0.4 * (39px + 120px * var(--ff, 1)) * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)) * (1 - var(--pd, 0)) + max(var(--fith, max(calc(616px + 120px * var(--ff, 1) + 2140px * var(--pd, 0) - 0.4 * (39px + 120px * var(--ff, 1)) * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px))), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 107px * var(--ff, 1) - 95px)) * var(--pd, 0)); background: var(--bg)">
+        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+        <h1 style="position: absolute; left: calc(41px + 1px * var(--pd, 0)); top: calc(65px * (1 - var(--pd, 0)) + 0.6 * (39px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 762px * var(--pd, 0)); text-align: left; margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: var(--tfs52, 52px); line-height: 120%">Our Invisable Hands</h1>
+        <div id="hands-carousel" onPointerDown="{{ handsDown }}" onPointerUp="{{ handsUp }}" onPointerLeave="{{ handsLeave }}" style="touch-action: none; position: absolute; left: 42px; top: calc(36px + 120px * var(--ff, 1) + 230px * var(--pd, 0) - 0.4 * (39px + 120px * var(--ff, 1)) * var(--pd, 0) - var(--pdshift, 0px)); width: calc(686px + 776px * var(--pd, 0)); height: calc(457.1px + 482.9px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
           <sc-for list="{{ handsSlides }}" as="slide" hint-placeholder-count="0">
             <div role="img" aria-label="Our Invisable Hands zine" style="{{ slide.style }}"></div>
           </sc-for>
         </div>
-        <div style="position: absolute; left: calc(1072px - 962px * var(--pd, 0)); top: calc(56px + 120px * var(--ff, 1) + 1140px * var(--pd, 0)); width: calc(432px + 908px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
+        <div data-fit-body="1" style="position: absolute; left: calc(765px - 723px * var(--pd, 0)); top: calc(149px * (1 - var(--pd, 0)) + (56px + 120px * var(--ff, 1) + 1236px - 0.4 * (39px + 120px * var(--ff, 1))) * var(--pd, 0) - var(--pdshift, 0px)); width: calc(752px + 710px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
           <p style="margin: 0 0 36px">The Cooper Hewitt: Made in America Exhibition, based in New York, showcases over 70 photographs of U.S. factories and manufacturing processes.</p>
           <p style="margin: 0">This zine translates the exhibition's own subject, the hidden labor behind manufacturing, into a layout, using bold, high contrast type to announce the theme before being able to see the photos. The repeated Peeps and piano string spreads use grid repetition, mirroring the exhibition's repeated gestures and assembly line rhythm. The full bleed single shots focus on the process of creation and allow viewers to appreciate industrial goods.</p>
         </div>
@@ -285,17 +317,17 @@
       </section>
     </sc-if>
     <sc-if value="{{ isKengo }}" hint-placeholder-val="{{ false }}">
-      <section data-screen-label="Kengo Kuma Project" style="position: relative; height: max(calc(1150px + 120px * var(--ff, 1) + 1510px * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)); background: var(--bg)">
-        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
-        <h1 style="position: absolute; left: calc(809px - 699px * var(--pd, 0)); top: calc(52px * (1 - var(--pd, 0)) + (39px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 640px * var(--pd, 0)); text-align: var(--pdta, left); margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: var(--tfs52, 52px); line-height: 120%">Kengo Kuma Brochure</h1>
-        <div id="kengo-carousel" onPointerDown="{{ kengoDown }}" onPointerUp="{{ kengoUp }}" onPointerLeave="{{ kengoLeave }}" style="touch-action: none; position: absolute; left: calc(42px + 68px * var(--pd, 0)); top: calc(36px + 120px * var(--ff, 1) + 230px * var(--pd, 0)); width: calc(980px + 360px * var(--pd, 0)); height: calc(653px + 240px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
+      <section data-screen-label="Kengo Kuma Project" data-fit-text="1" style="position: relative; height: calc(max(calc(616px + 120px * var(--ff, 1) + 2140px * var(--pd, 0) - 0.4 * (39px + 120px * var(--ff, 1)) * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)) * (1 - var(--pd, 0)) + max(var(--fith, max(calc(616px + 120px * var(--ff, 1) + 2140px * var(--pd, 0) - 0.4 * (39px + 120px * var(--ff, 1)) * var(--pd, 0)), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px))), calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 107px * var(--ff, 1) - 95px)) * var(--pd, 0)); background: var(--bg)">
+        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+        <h1 style="position: absolute; left: calc(41px + 1px * var(--pd, 0)); top: calc(65px * (1 - var(--pd, 0)) + 0.6 * (39px + 120px * var(--ff, 1)) * var(--pd, 0)); width: calc(700px + 762px * var(--pd, 0)); text-align: left; margin: 0px; font-family: &quot;IM Fell DW Pica&quot;, serif; font-weight: 400; font-size: var(--tfs52, 52px); line-height: 120%">Kengo Kuma Brochure</h1>
+        <div id="kengo-carousel" onPointerDown="{{ kengoDown }}" onPointerUp="{{ kengoUp }}" onPointerLeave="{{ kengoLeave }}" style="touch-action: none; position: absolute; left: 42px; top: calc(36px + 120px * var(--ff, 1) + 230px * var(--pd, 0) - 0.4 * (39px + 120px * var(--ff, 1)) * var(--pd, 0) - var(--pdshift, 0px)); width: calc(686px + 776px * var(--pd, 0)); height: calc(457.1px + 482.9px * var(--pd, 0)); overflow: hidden; background: var(--box); cursor: pointer">
           <sc-for list="{{ kengoSlides }}" as="slide" hint-placeholder-count="0">
-            <div role="img" aria-label="Kengo Kuma booklet" style="{{ slide.style }}"></div>
+            <div role="img" aria-label="Kengo Kuma booklet" style="{{ slide.style }}"><div style="{{ slide.bg }}"></div></div>
           </sc-for>
         </div>
-        <div style="position: absolute; left: calc(1072px - 962px * var(--pd, 0)); top: calc(56px + 120px * var(--ff, 1) + 1140px * var(--pd, 0)); width: calc(432px + 908px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
-          <p style="margin: 0 0 36px">Kengo Kuma is a contemporary architect known for his innovative use of materials and the relationship between architecture and nature.</p>
-          <p style="margin: 0">This brochure focuses on his use of wood: I used the grain, joinery, and structural lines in each photograph as leading lines across the spread, keeping the layout photography-led and light on text to mirror Kuma's anti-object philosophy. I paced spreads by alternating full-bleed images with quiet typography to build rhythm, and paired the kanji 隈研吾 with the Latin wordmark and serif pull quotes to tie his culture and voice into the design.</p>
+        <div data-fit-body="1" style="position: absolute; left: calc(765px - 723px * var(--pd, 0)); top: calc(149px * (1 - var(--pd, 0)) + (56px + 120px * var(--ff, 1) + 1236px - 0.4 * (39px + 120px * var(--ff, 1))) * var(--pd, 0) - var(--pdshift, 0px)); width: calc(752px + 710px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent); height: calc(466px * (1 - var(--pd, 0)))">
+          
+          <p style="margin: 0 0 36px">Kengo Kuma is a contemporary architect known for his innovative use of materials and the relationship between architecture and nature.</p><p style="margin: 0">This brochure focuses on his use of wood: I used the grain, joinery, and structural lines in each photograph as leading lines across the spread, keeping the layout photography-led and light on text to mirror Kuma's anti-object philosophy. I paced spreads by alternating full-bleed images with quiet typography to build rhythm, and paired the kanji 隈研吾 with the Latin wordmark and serif pull quotes to tie his culture and voice into the design.</p>
         </div>
         <sc-if value="{{ kLightboxOpen }}" hint-placeholder-val="{{ false }}">
           <div onClick="{{ kLbClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(10,10,14,0.82); display: flex; align-items: center; justify-content: center; animation: lb-fade 0.25s ease both">
@@ -304,7 +336,7 @@
             <button onClick="{{ kLbNext }}" aria-label="next image" style="position: absolute; right: max(12px, calc(50% - 660px - 90px)); top: 50%; z-index: 5; width: 26px; height: 34px; border: none; background: none; padding: 0; cursor: pointer; opacity: 0.9; transition: opacity 0.2s ease, transform 0.2s ease; transform: translateY(-50%)" style-hover="opacity: 1; transform: translateY(-50%) scale(1.12)"><svg width="15" height="27" viewBox="0 0 34 60" fill="none" style="display: block; margin: 0 auto"><path d="M4 4 L28 30 L4 56" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
             <div id="kengo-lightbox" onClick="{{ kLbStop }}" style="width: 1320px; max-width: min(calc(82vw / var(--pz, 0.9075)), calc(100vw / var(--pz, 0.9075) - 110px)); height: calc(76vh / var(--pz, 0.9075)); position: relative; overflow: hidden">
               <sc-for list="{{ kengoLbSlides }}" as="slide" hint-placeholder-count="0">
-                <div role="img" aria-label="Kengo Kuma booklet enlarged" style="{{ slide.style }}"></div>
+                <div role="img" aria-label="Kengo Kuma booklet enlarged" style="{{ slide.style }}"><div style="{{ slide.bg }}"></div></div>
               </sc-for>
             </div>
           </div>
@@ -313,7 +345,7 @@
     </sc-if>
     <sc-if value="{{ isFusar }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="Fusar Project" style="position: relative; height: 5230px; background: var(--bg)">
-        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
         <image-slot id="proj-fusar-anim" src="assets/slots/proj-fusar-anim.webp" shape="rect" placeholder="fusar animation — drop file" style="position: absolute; left: 646px; top: 117px; width: 868px; height: 651px; background: var(--box)"></image-slot>
         <div role="img" aria-label="Fusar" style="position: absolute; left: 41px; top: 419px; width: 549px; height: 369px; background: var(--ink); -webkit-mask: url('assets/fusar-logo.svg') center / contain no-repeat; mask: url('assets/fusar-logo.svg') center / contain no-repeat"></div>
         <div style="position: absolute; left: 132px; top: 711px; font-family: 'IM Fell DW Pica', serif; font-size: 40px; line-height: 120%">Typeface</div>
@@ -335,48 +367,129 @@
             </div>
           </div>
           <div style="position: absolute; left: 0; top: 0; transform: scale(var(--heroscale, 1)); transform-origin: top left; width: var(--herocolw, 100%); height: 100%">
-            <div style="position: absolute; left: 42px; top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ffhero, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ffhero, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+            <div style="position: absolute; left: 42px; top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ffhero, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ffhero, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
           </div>
         </div>
         <div style="position: absolute; left: 0; top: 619px; width: 100%; height: calc(5452px + var(--lbgap, 0px) + var(--lbx, 0px)); z-index: 1; background: var(--bg)" style-before="content: ''; position: absolute; z-index: -1; top: 0; bottom: 0; left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg)">
           <h2 style="position: absolute; left: 42px; top: 83px; margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: var(--tfs44, 44px); line-height: 120%">Logo Redesign</h2>
-          <div style="position: absolute; left: 42px; top: calc(810px + 810px * var(--pd, 0)); width: calc(612px + 850px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
+          <div style="position: absolute; left: 42px; top: calc(810px + 1180px * var(--pd, 0)); width: calc(612px + 850px * var(--pd, 0)); font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; color: color-mix(in srgb, var(--ink) 90%, transparent)">
             <p style="margin: 0 0 36px">Letterboxd is a film social media platform that lets users log movies, rate and review films, maintain a digital diary, build custom watchlists, and follow friends or critics.</p>
             <p style="margin: 0 0 36px">I wanted to play around with Letterboxd’s current logo by creating a new concept using their existing brand identity.</p>
             <p style="margin: 0">I kept the brand’s specific orange, green, and blue colorway as they are a core part of the brand in most people’s minds. I reworked the three circles into a radial, six-petal composition, referencing the mechanics of a rotating film reel, and adding motion to the logo.</p>
           </div>
-          <image-slot id="proj-lb-1" src="assets/slots/proj-lb-1.webp" shape="rect" placeholder="logo — drop image" style="position: absolute; left: 42px; top: calc(171px + 252px * var(--pd, 0)); width: 612px; height: 612px; background: var(--box)"></image-slot>
-          <image-slot id="proj-lb-2" src="assets/slots/proj-lb-2.webp" shape="rect" placeholder="mock up — drop image" style="position: absolute; left: 712px; top: calc(170px + 130px * var(--pd, 0)); width: 792px; height: 594px; background: var(--box)"></image-slot>
-          <image-slot id="proj-lb-1b" src="assets/slots/proj-lb-1b.webp" shape="rect" placeholder="mock up — drop image" style="position: absolute; left: 712px; top: calc(834px + 130px * var(--pd, 0)); width: 792px; height: 594px; background: var(--box)"></image-slot>
+          <image-slot id="proj-lb-1" src="assets/slots/proj-lb-1.webp" shape="rect" placeholder="logo — drop image" style="position: absolute; left: 42px; top: calc(171px + 129px * var(--pd, 0)); width: calc(612px - 43px * var(--pd, 0)); height: calc(612px - 43px * var(--pd, 0)); background: var(--box)"></image-slot>
+          <image-slot id="proj-lb-2" src="assets/slots/proj-lb-2.webp" shape="rect" placeholder="mock up — drop image" style="position: absolute; left: calc(712px - 39px * var(--pd, 0)); top: calc(170px + 130px * var(--pd, 0)); width: calc(792px + 39px * var(--pd, 0)); height: calc(594px - 25px * var(--pd, 0)); background: var(--box)"></image-slot>
+          <image-slot id="proj-lb-1b" src="assets/slots/proj-lb-1b.webp" shape="rect" placeholder="mock up — drop image" style="position: absolute; left: calc(712px - 670px * var(--pd, 0)); top: calc(834px + 90px * var(--pd, 0)); width: calc(792px + 670px * var(--pd, 0)); height: calc(594px + 406px * var(--pd, 0)); background: var(--box)"></image-slot>
           
           <h2 style="position: absolute; left: 42px; top: calc(2308px + var(--lbgap, 0px)); margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: var(--tfs44, 44px); line-height: 120%">App Prototype</h2>
-          <div style="position: absolute; left: 950px; top: calc(2288px + var(--lbgap, 0px) + 90px * var(--pd, 0)); color: var(--ink); pointer-events: none">
+          <div id="lb-tryme" style="position: absolute; left: 983px; top: calc(2313px + var(--lbgap, 0px) + 40px * var(--pd, 0)); color: var(--ink); pointer-events: none; transform: {{ lbTryT }}">
             <span style="font-family: 'Kelly Slab', serif; font-size: var(--kfs24, 24px); line-height: 100%">Hey, try me!</span>
-            <svg width="80" height="62" viewBox="0 0 80 62" fill="none" style="position: absolute; left: calc(146px + 180px * var(--pd, 0)); top: 8px"><path d="M4 8 C 34 2, 58 14, 68 44" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path><path d="M54 38 L 68 44 L 71 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
           </div>
-          <div ref="{{ phoneRef }}" style="position: absolute; left: 1030px; top: calc(2350px + var(--lbgap, 0px) + 160px * var(--pd, 0)); width: 530.1px; height: 1100px; transform-origin: top left">
+          <div id="lb-tryarrow" style="position: absolute; left: calc(983px + 146px + 180px * var(--pd, 0)); top: calc(2313px + var(--lbgap, 0px) + 40px * var(--pd, 0) + 8px); color: var(--ink); pointer-events: none; transform: {{ lbArrowT }}"><svg width="80" height="62" viewBox="0 0 80 62" fill="none" style="display: block"><path d="M4 8 C 34 2, 58 14, 68 44" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path><path d="M54 38 L 68 44 L 71 29" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></div>
+          <div ref="{{ phoneRef }}" style="position: absolute; left: 1030px; top: calc(2407px + var(--lbgap, 0px) + 160px * var(--pd, 0)); width: 530.1px; height: 1100px; transform-origin: top left">
             <div style="position: absolute; left: 27.4px; top: 33.2px; width: 475.3px; height: 1033.6px; border-radius: 56.8px; overflow: hidden; background: #000">
               <div style="position: absolute; left: 0; top: 0; width: 475.3px; height: 1033.6px; zoom: var(--pzi, 1); transform: scale(var(--pzs, 1)); transform-origin: 0 0">
               <iframe src="letterboxd-app/Letterboxd App.dc.html" title="Letterboxd app prototype — interactive" style="position: absolute; left: -47.3px; top: -56.8px; width: 482px; height: 1062px; border: none; transform: scale(1.1826); transform-origin: top left; background: transparent" allowtransparency="true"></iframe>
               </div>
             </div>
-            <img src="assets/phone-outline.png" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none">
+            <img src="assets/phone-outline.png" alt="" style="position: absolute; inset: 0px; width: 100%; height: 100%; pointer-events: none; top: 1px">
+            <sc-if value="{{ grid1 }}" hint-placeholder-val="{{ false }}"><div onClick="{{ lbPhoneShow }}" role="button" aria-label="tap to open the interactive prototype" style="position: absolute; left: 27.4px; top: 33.2px; width: 475.3px; height: 1033.6px; border-radius: 56.8px; z-index: 4; cursor: pointer; background: transparent"></div></sc-if>
+            <button onClick="{{ lbPhoneShow }}" title="enlarge prototype" aria-label="open enlarged prototype" style="position: absolute; right: -34px; top: -4px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; border: none; background: var(--band); border-radius: 50%; box-shadow: 2px 3px 8px rgba(0,0,0,0.25); opacity: 0.5; cursor: pointer; transition: transform 0.2s ease, opacity 0.2s ease; z-index: 5" style-hover="transform: scale(1.1); opacity: 1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 3 H21 V10 M21 3 L13.5 10.5 M10 21 H3 V14 M3 21 L10.5 13.5" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
           </div>
+          
           <image-slot id="proj-lb-4" src="assets/slots/proj-lb-4.webp" shape="rect" placeholder="drop image" style="position: absolute; left: 43px; top: calc(2390px + var(--lbgap, 0px) + 160px * var(--pd, 0)); width: 1002px; height: 705px; background: var(--box)"></image-slot>
           
           <h2 style="position: absolute; left: 42px; top: calc(3248px + var(--lbgap, 0px) + 240px * var(--pd, 0)); margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: var(--tfs44, 44px); line-height: 120%">Wireframes</h2>
           <image-slot id="proj-lb-6" src="assets/slots/proj-lb-6.webp" shape="rect" placeholder="drop image" style="position: absolute; left: 42px; top: calc(3336px + var(--lbgap, 0px) + 320px * var(--pd, 0)); width: 1462px; height: 865px; background: var(--box)"></image-slot>
           <image-slot id="proj-lb-7" src="assets/slots/proj-lb-7.webp" shape="rect" placeholder="drop image" style="position: absolute; left: 42px; top: calc(4256px + var(--lbgap, 0px) + 320px * var(--pd, 0)); width: 712px; height: 993px; background: var(--box)"></image-slot>
           <image-slot id="proj-lb-8" src="assets/slots/proj-lb-8.webp" shape="rect" placeholder="drop image" style="position: absolute; left: 786px; top: calc(4255px + var(--lbgap, 0px) + 320px * var(--pd, 0)); width: 718px; height: 539px; background: var(--box)"></image-slot>
-          <p style="position: absolute; left: calc(786px - 744px * var(--pd, 0)); top: calc(4077px + 2702px * var(--pd, 0)); width: calc(719px + 743px * var(--pd, 0)); margin: 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; min-height: 476px; color: color-mix(in srgb, var(--ink) 90%, transparent)">I restructured Letterboxd's interface around the idea that the app's real value isn't the database, but your friends’ taste. Friends activity now has its own primary nav slot, alongside Home, Search, Log, and Library, rather than being buried a few taps deep. <br><br>I also introduced stories, a casual way for friends to share photos and quick thoughts while watching, so the social layer feels more present. <br><br>Finally, I redrew the vectors and interactive elements, replacing the current mix of styles, so the interface reads as one cohesive system.</p>
+          <p style="position: absolute; left: calc(786px - 744px * var(--pd, 0)); top: calc(4077px + 2249px * var(--pd, 0)); width: calc(719px + 743px * var(--pd, 0)); margin: 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs, 30px); line-height: 140%; min-height: 476px; color: color-mix(in srgb, var(--ink) 90%, transparent)">I restructured Letterboxd's interface around the idea that the app's real value isn't the database, but your friends’ taste. Friends activity now has its own primary nav slot, alongside Home, Search, Log, and Library, rather than being buried a few taps deep. <br><br>I also introduced stories, a casual way for friends to share photos and quick thoughts while watching, so the social layer feels more present. <br><br>Finally, I redrew the vectors and interactive elements, replacing the current mix of styles, so the interface reads as one cohesive system.</p>
+        </div>
+      </section>
+    </sc-if>
+    <sc-if value="{{ isBloom }}" hint-placeholder-val="{{ false }}">
+      <section data-screen-label="Bloom Project" style="position: relative; background: var(--bg)">
+        <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); height: 833px; overflow: hidden; z-index: 0">
+          <image-slot id="bloom-hero" src="assets/bloom/hero-keyboard.jpg" shape="rect" fit="cover" placeholder="Bloom hero — drop image" style="position: absolute; inset: 0; display: block; width: 100%; height: 100%"></image-slot>
+          <div style="position: absolute; left: 42px; top: 16px; z-index: 6; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+          
+          <img id="bloom-logo" src="assets/bloom/logo.png" alt="Bloom" draggable="false" style="position: absolute; left: 73px; top: 542px; width: 396px; height: 164px; z-index: 7; user-select: none; box-shadow: none !important">
+        </div>
+        
+        <div id="bloom-fan" style="position: relative; z-index: 1; margin-top: -2px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg); height: calc(1620px + 660px * var(--pd, 0)); overflow: hidden"><img src="assets/bloom/flowers-band.svg" alt="" style="position: absolute; left: calc(-400px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 0; width: 1958px; height: 1620px; pointer-events: none">
+          <h2 style="position: absolute; left: calc(42px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 61px; margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 700; font-size: calc(56px + 30px * var(--pd, 0)); line-height: 118%; letter-spacing: -0.5px">Digital Journaling<br>Reimagined</h2>
+          <div style="position: absolute; left: calc(172px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: calc(543px + 300px * var(--pd, 0)); width: 420px; aspect-ratio: 735 / 1594; z-index: 3; will-change: transform; transform: translate(calc((1 - var(--bfan, 0)) * -50px), calc((1 - var(--bfan, 0)) * -100px)) rotate(calc(-24deg + (1 - var(--bfan, 0)) * 18deg)); background: #C7CBD1; border-radius: 64px; padding: 5px; box-sizing: content-box; box-shadow: 26px 34px 70px rgba(6, 20, 60, 0.38)">
+            <div style="position: relative; width: 100%; height: 100%; background: #0E1013; border-radius: 59px; padding: 11px; box-sizing: border-box">
+              
+              <div style="position: absolute; top: 28px; left: 50%; transform: translateX(-50%); width: 106px; height: 26px; background: #0E1013; border-radius: 14px"></div>
+            <img src="uploads/bloom mockup/Bloom app mock up/Habit detail- journal.png" alt="Bloom daily journal screen" style="display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 48px"></div>
+          </div>
+          <div style="position: absolute; left: calc(492px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: calc(199px + 300px * var(--pd, 0)); width: 460px; aspect-ratio: 735 / 1594; z-index: 2; will-change: transform; transform: translate(calc((1 - var(--bfan, 0)) * -350px), calc((1 - var(--bfan, 0)) * 230px)) rotate(calc(-8deg + (1 - var(--bfan, 0)) * 8deg)); background: #C7CBD1; border-radius: 68px; padding: 5px; box-sizing: content-box; box-shadow: 26px 34px 70px rgba(6, 20, 60, 0.38)">
+            <div style="position: relative; width: 100%; height: 100%; background: #0E1013; border-radius: 63px; padding: 12px; box-sizing: border-box">
+              
+              <div style="position: absolute; top: 30px; left: 50%; transform: translateX(-50%); width: 116px; height: 28px; background: #0E1013; border-radius: 15px"></div>
+            <img src="uploads/bloom mockup/Bloom app mock up/Home Page (2).png" alt="Bloom home screen" style="display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 51px"></div>
+          </div>
+          <div style="position: absolute; left: calc(936px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: calc(109px + 300px * var(--pd, 0)); width: 430px; aspect-ratio: 735 / 1594; z-index: 1; will-change: transform; transform: translate(calc((1 - var(--bfan, 0)) * -840px), calc((1 - var(--bfan, 0)) * 335px)) rotate(calc(21deg + (1 - var(--bfan, 0)) * -14deg)); background: #C7CBD1; border-radius: 65px; padding: 5px; box-sizing: content-box; box-shadow: 20px 26px 48px rgba(6, 20, 60, 0.3)">
+            <div style="position: relative; width: 100%; height: 100%; background: #0E1013; border-radius: 60px; padding: 11px; box-sizing: border-box">
+              
+              <div style="position: absolute; top: 28px; left: 50%; transform: translateX(-50%); width: 108px; height: 26px; background: #0E1013; border-radius: 14px"></div><img src="uploads/bloom mockup/Bloom app mock up/Habit detail- fitness.png" alt="Bloom fitness tracking screen" style="display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 49px">
+            </div>
+          </div>
+          <div style="position: absolute; left: 802px; top: calc(1276px + 300px * var(--pd, 0)); width: 717px; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; color: color-mix(in srgb, var(--ink) 90%, transparent); height: 319px">
+            
+            <p style="margin: 0 0 32px">Bloom is a habit tracking app designed for college students. The app is tailored to log each student's habit goals such as fitness, journaling, sleep, and hobbies.</p>
+          </div>
+        </div>
+        <div id="bloom-mockup" style="position: relative; z-index: 1; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg); height: 1123px; overflow: hidden">
+          <h2 style="position: absolute; left: 73px; top: 20px; margin: 0; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: 60px; line-height: 110%">App Mockup</h2>
+          <div style="position: absolute; left: calc(55px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 143px; width: 420px; aspect-ratio: 400 / 802">
+            <img src="assets/bloom/screen-home.svg" alt="Bloom home screen" style="position: absolute; left: 6%; top: 2.618%; width: 88%; height: 94.64%; object-fit: cover; object-position: top center">
+            <img src="assets/bloom/screen-journal.svg" alt="Bloom daily journal screen" style="position: absolute; left: 6%; top: 2.618%; width: 88%; height: 94.64%; object-fit: cover; object-position: top center; opacity: {{ bmScrJournal }}; transition: opacity 0.3s ease">
+            <img src="assets/bloom/screen-fitness.svg" alt="Bloom fitness tracking screen" style="position: absolute; left: 6%; top: 2.618%; width: 88%; height: 94.64%; object-fit: cover; object-position: top center; opacity: {{ bmScrFitness }}; transition: opacity 0.3s ease">
+            <img src="assets/bloom/phone-frame.png" alt="" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none">
+          </div>
+          <div style="position: absolute; left: calc(505px - max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 564px; transform: translateY(-50%); width: 1000px; max-width: calc(100% - 550px); display: flex; flex-direction: column; gap: 24px; color: var(--ink)">
+            <sc-if value="{{ grid1 }}" hint-placeholder-val="{{ false }}">
+            <div style="position: relative">
+              <div onClick="{{ bmDdToggle }}" style="display: inline-flex; align-items: flex-end; gap: 16px; color: #000; cursor: pointer">
+                <sc-if value="{{ bmIsHome }}" hint-placeholder-val="{{ true }}"><span role="img" aria-hidden="true" style="flex: none; width: 38px; height: 38px; background: #000; -webkit-mask: url('uploads/FlowerTulip.png') center / contain no-repeat; mask: url('uploads/FlowerTulip.png') center / contain no-repeat"></span></sc-if><sc-if value="{{ bmIsJournal }}" hint-placeholder-val="{{ false }}"><span role="img" aria-hidden="true" style="flex: none; width: 38px; height: 38px; background: #000; -webkit-mask: url('uploads/BookOpenText.png') center / contain no-repeat; mask: url('uploads/BookOpenText.png') center / contain no-repeat"></span></sc-if><sc-if value="{{ bmIsFitness }}" hint-placeholder-val="{{ false }}"><span role="img" aria-hidden="true" style="flex: none; width: 38px; height: 38px; background: #000; -webkit-mask: url('uploads/Barbell.png') center / contain no-repeat; mask: url('uploads/Barbell.png') center / contain no-repeat"></span></sc-if><span style="font-family: 'Kelly Slab', serif; font-size: 38px; line-height: 38px; letter-spacing: 2px">{{ bmTitle }}</span><svg width="24" height="15" viewBox="0 0 26 16" fill="none" style="margin-left: 2px; align-self: center"><path d="M2 2 L13 13 L24 2" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </div>
+              <sc-if value="{{ bmDdOpen }}" hint-placeholder-val="{{ false }}">
+                <div style="position: absolute; left: 54px; top: 52px; z-index: 10; background: var(--band); box-shadow: 4px 6px 18px rgba(0,0,0,0.3); padding: 6px 0; min-width: 330px">
+                  <div onClick="{{ bmPickHome }}" style="padding: 12px 24px; font-family: 'Kelly Slab', serif; font-size: 38px; letter-spacing: 2px; color: #000; cursor: pointer" style-hover="background: rgba(0,0,0,0.06)">HOME</div>
+                  <div onClick="{{ bmPickJournal }}" style="padding: 12px 24px; font-family: 'Kelly Slab', serif; font-size: 38px; letter-spacing: 2px; color: #000; cursor: pointer" style-hover="background: rgba(0,0,0,0.06)">DAILY JOURNAL</div>
+                  <div onClick="{{ bmPickFitness }}" style="padding: 12px 24px; font-family: 'Kelly Slab', serif; font-size: 38px; letter-spacing: 2px; color: #000; cursor: pointer" style-hover="background: rgba(0,0,0,0.06)">FITNESS TRACKING</div>
+                </div>
+              </sc-if>
+              <div style="display: grid"><p style="margin: 10px 0 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; color: #000; text-wrap: pretty; grid-area: 1 / 1; visibility: {{ bmVisHome }}">The home screen displays Habit completion rates throughout the week. Each day there will be a mood tracker so users are able to easily log their mental state each day. Personal goals can be checked off on the home screen and if the goal wasn't fully completed or needs to be edited, they are able to edit it. Users are also able to fully customize what widgets they want on their home page.</p><p style="margin: 10px 0 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; color: #000; text-wrap: pretty; grid-area: 1 / 1; visibility: {{ bmVisJournal }}">Each day users can log a new entry: reflection, goal for next day, something they were grateful for, and something they accomplished- inspired by the 3x3 journaling method but simplified. The app will ask random questions each day that users can answer. Photos can also be added as a visual reminder of what users did that day.</p><p style="margin: 10px 0 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; color: #000; text-wrap: pretty; grid-area: 1 / 1; visibility: {{ bmVisFitness }}">Users can set fitness goals, such as a goal for how many steps that they want to achieve, for the day, week, or a specific deadline. Goals will display in order of which deadline is upcoming. Bloom is able to track steps, calories burned, flights climbed, and other activity through your devices. Like the home page, users can customize the widgets they see by holding the gym icon down and editing.</p></div>
+            </div>
+            </sc-if>
+            <sc-if value="{{ notGrid1 }}" hint-placeholder-val="{{ true }}">
+            <div onMouseEnter="{{ bmHoverHome }}" onMouseLeave="{{ bmHoverOff }}" onClick="{{ bmPinHome }}" style="cursor: pointer; opacity: {{ bmOpHome }}; transition: opacity 0.3s ease">
+              <div style="display: flex; align-items: flex-end; gap: 16px; color: #000"><span role="img" aria-hidden="true" style="flex: none; width: 38px; height: 38px; background: #000; -webkit-mask: url('uploads/FlowerTulip.png') center / contain no-repeat; mask: url('uploads/FlowerTulip.png') center / contain no-repeat"></span><span style="font-family: 'Kelly Slab', serif; font-size: 38px; line-height: 38px; letter-spacing: 2px">HOME</span></div>
+              <p style="margin: 10px 0 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; text-wrap: pretty">The home screen displays Habit completion rates throughout the week. Each day there will be a mood tracker so users are able to easily log their mental state each day. Personal goals can be checked off on the home screen and if the goal wasn't fully completed or needs to be edited, they are able to edit it. Users are also able to fully customize what widgets they want on their home page.</p>
+            </div>
+            <div onMouseEnter="{{ bmHoverJournal }}" onMouseLeave="{{ bmHoverOff }}" onClick="{{ bmPinJournal }}" style="cursor: pointer; opacity: {{ bmOpJournal }}; transition: opacity 0.3s ease">
+              <div style="display: flex; align-items: flex-end; gap: 16px; color: #000"><span role="img" aria-hidden="true" style="flex: none; width: 38px; height: 38px; background: #000; -webkit-mask: url('uploads/BookOpenText.png') center / contain no-repeat; mask: url('uploads/BookOpenText.png') center / contain no-repeat"></span><span style="font-family: 'Kelly Slab', serif; font-size: 38px; line-height: 38px; letter-spacing: 2px">DAILY JOURNAL</span></div>
+              <p style="margin: 10px 0 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; text-wrap: pretty">Each day users can log a new entry: reflection, goal for next day, something they were grateful for, and something they accomplished- inspired by the 3x3 journaling method but simplified. The app will ask random questions each day that users can answer. Photos can also be added as a visual reminder of what users did that day.</p>
+            </div>
+            <div onMouseEnter="{{ bmHoverFitness }}" onMouseLeave="{{ bmHoverOff }}" onClick="{{ bmPinFitness }}" style="cursor: pointer; opacity: {{ bmOpFitness }}; transition: opacity 0.3s ease">
+              <div style="display: flex; align-items: flex-end; gap: 16px; color: #000"><span role="img" aria-hidden="true" style="flex: none; width: 38px; height: 38px; background: #000; -webkit-mask: url('uploads/Barbell.png') center / contain no-repeat; mask: url('uploads/Barbell.png') center / contain no-repeat"></span><span style="font-family: 'Kelly Slab', serif; font-size: 38px; line-height: 38px; letter-spacing: 2px">FITNESS TRACKING</span></div>
+              <p style="margin: 10px 0 0; font-family: 'Kelly Slab', serif; font-size: var(--kfs26, 26px); line-height: 145%; text-wrap: pretty">Users can set fitness goals, such as a goal for how many steps that they want to achieve, for the day, week, or a specific deadline. Goals will display in order of which deadline is upcoming. Bloom is able to track steps, calories burned, flights climbed, and other activity through your devices. Like the home page, users can customize the widgets they see by holding the gym icon down and editing.</p>
+            </div>
+            </sc-if>
+          
+          </div>
         </div>
       </section>
     </sc-if>
     <sc-if value="{{ isForFun }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="For Fun">
-        <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); z-index: 0; height: calc(626px * var(--heroscale, 1) + var(--heroextra, 0px)); overflow: hidden; background: radial-gradient(1021px 947px at 78.59% 41.03%, var(--hero1) 0%, var(--hero2) 100%)">
+        <div style="position: sticky; top: 107px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); z-index: 0; height: calc(626px * var(--heroscale, 1) + var(--heroextra, 0px)); overflow: hidden; background: #FFFBF8">
+          <div style="position: absolute; inset: 0; background: url('assets/paper-texture.webp') center / cover no-repeat; opacity: 0.3; pointer-events: none"></div>
           <div ref="{{ heroRef }}" style="position: absolute; left: 0; top: 0; transform: scale(var(--heroscale, 1)); transform-origin: top left; width: var(--herocolw, 100%); height: 100%">
-          <div style="position: absolute; left: 42px; top: 16px; width: 104.5px; height: 103.4px; z-index: 6; transform: scale(var(--ffhero, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ffhero, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+          <div style="position: absolute; left: 42px; top: 16px; width: 104.5px; height: 103.4px; z-index: 6; transform: scale(var(--ffhero, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ffhero, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
           <sc-if value="{{ showClickHint }}" hint-placeholder-val="{{ true }}">
             <div style="{{ clickHintStyle }}"><span style="position: absolute; left: 155px; top: 33px; transform: scale(var(--ffhero, 1)); transform-origin: -113px -17px; font-family: 'Kelly Slab', serif; font-size: 24px; line-height: 100%">Hey, click me!</span></div>
           </sc-if>
@@ -409,11 +522,31 @@
           </div>
           </div>
         </div>
-        <div style="position: relative; z-index: 1; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg); display: flex; flex-wrap: wrap; gap: 48px 32px; padding: 64px max(var(--gutter, 34px), min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 745px))) 60px; justify-content: center">
+        <div style="position: relative; z-index: 1; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--bg); display: flex; flex-wrap: wrap; gap: 48px 32px; padding: 64px max(var(--gutter, 34px), min(var(--padcap, 9999px), calc((50vw / var(--pz, 0.9075)) - 745px))) 60px; justify-content: flex-start; box-shadow: 0 -3px 8px rgba(0,0,0,0.25)">
+          <figure style="margin: 0; width: var(--cardw, 475px)">
+            <div class="fun-fade" onClick="{{ funAppleClick }}" style="position: relative; width: 100%; aspect-ratio: 475 / 630; box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer; overflow: hidden">
+              <div style="position: absolute; inset: 0; background: url('assets/fun/apple-1.webp') center / cover no-repeat"></div>
+              <div class="fun-fade-top" style="position: absolute; inset: 0; background: url('assets/fun/apple-2.webp') center / cover no-repeat"></div>
+            </div>
+            <figcaption style="margin-top: 16px">
+              <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Laser Cut Apple</div>
+              <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Birch Plywood Puzzle Coasters</div>
+            </figcaption>
+          </figure>
+          <figure style="margin: 0; width: var(--cardw, 475px)">
+            <div class="fun-fade" onClick="{{ funLayeredClick }}" style="position: relative; width: 100%; aspect-ratio: 475 / 630; box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer; overflow: hidden">
+              <div style="position: absolute; inset: 0; background: url('assets/fun/layered-front.webp') center / cover no-repeat"></div>
+              <div class="fun-fade-top" style="position: absolute; inset: 0; background: url('assets/fun/layered-back.webp') center / cover no-repeat"></div>
+            </div>
+            <figcaption style="margin-top: 16px">
+              <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Womens Haircut</div>
+              <div style="font-family: 'Kelly Slab', serif; font-size: 19px; margin-top: 8px; color: var(--ink-soft)">Medium Layered</div>
+            </figcaption>
+          </figure>
           <figure style="margin: 0; width: var(--cardw, 475px)">
             <div class="fun-fade" onClick="{{ funMens1Click }}" style="position: relative; width: 100%; aspect-ratio: 475 / 630; box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer; overflow: hidden">
-              <div style="position: absolute; inset: 0; background: url('uploads/IMG_9341.png') center / cover no-repeat"></div>
-              <div class="fun-fade-top" style="position: absolute; inset: 0; background: url('uploads/kyle hair.png') center / cover no-repeat"></div>
+              <div style="position: absolute; inset: 0; background: url('assets/fun-mens1.jpg') center / cover no-repeat"></div>
+              <div class="fun-fade-top" style="position: absolute; inset: 0; background: url('assets/fun-mens1-hover.jpg') center / cover no-repeat"></div>
             </div>
             <figcaption style="margin-top: 16px">
               <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Mens Haircut</div>
@@ -432,8 +565,8 @@
           </figure>
           <figure style="margin: 0; width: var(--cardw, 475px)">
             <div class="fun-fade" onClick="{{ funMensClick }}" style="position: relative; width: 100%; aspect-ratio: 475 / 630; box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow); cursor: pointer; overflow: hidden">
-              <div style="position: absolute; inset: 0; background: url('assets/mens-front-34.png') center / cover no-repeat"></div>
-              <div class="fun-fade-top" style="position: absolute; inset: 0; background: url('uploads/IMG_9578_edit3.jpg') center / cover no-repeat"></div>
+              <div style="position: absolute; inset: 0; background: url('assets/fun/mens-front-34.webp') center / cover no-repeat"></div>
+              <div class="fun-fade-top" style="position: absolute; inset: 0; background: url('assets/fun/mens-back.webp') center / cover no-repeat"></div>
             </div>
             <figcaption style="margin-top: 16px">
               <div style="font-family: 'IM Fell DW Pica', serif; font-size: 34px; line-height: 115%">Mens Haircut</div>
@@ -460,13 +593,12 @@
     </sc-if>
     <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="Contact" style="position: relative; padding-bottom: 100px; box-sizing: border-box; min-height: calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)">
-        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
         <sc-if value="{{ showClickHint }}" hint-placeholder-val="{{ true }}">
           <div style="{{ clickHintStyle }}"><span style="position: absolute; left: calc(155px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 33px; transform: scale(var(--ff, 1)); transform-origin: -113px -17px; font-family: 'Kelly Slab', serif; font-size: 24px; line-height: 100%">Hey, click me!</span></div>
         </sc-if>
         <h1 style="margin: 0; padding-top: 95px; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: 64px; line-height: 100%; text-align: center">Lets get in touch!</h1>
-        <div style="margin-top: 24px; display: flex; justify-content: center; align-items: center; gap: 6px; font-family: 'IM Fell DW Pica', serif; font-size: 44px; line-height: 135%">
-          <span style="display: inline-block; position: relative; top: 2px; width: 54px; height: 33px; background: var(--ink); -webkit-mask: url('assets/mail-icon.png') center / contain no-repeat; mask: url('assets/mail-icon.png') center / contain no-repeat"></span>
+        <div style="margin-top: 24px; display: flex; justify-content: center; align-items: center; gap: 6px; font-family: 'Kelly Slab', serif; font-size: 44px; line-height: 135%">
           <a href="mailto:sophiahuangxyz@gmail.com" style="text-decoration: none">sophiahuangxyz@gmail.com</a>
         </div>
         <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 54px; padding: 90px max(20px, min(107px, calc(50% - 490px))) 0; align-items: flex-start">
@@ -482,23 +614,36 @@
     </sc-if>
     <sc-if value="{{ isResume }}" hint-placeholder-val="{{ false }}">
       <section data-screen-label="Resume" style="position: relative; padding-bottom: 100px; box-sizing: border-box; min-height: calc(var(--vhu, 100vh) / var(--pz, 0.9075) - 202px)">
-        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.png') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
+        <div style="position: absolute; left: calc(42px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 16px; width: 104.5px; height: 103.4px; transform: scale(var(--ff, 1)); transform-origin: top left; transition: transform 0.2s ease" style-hover="transform: scale(calc(var(--ff, 1) * 1.07))"><button onClick="{{ toggleTheme }}" title="{{ fruitTitle }}" aria-label="switch color theme" style="display: block; width: 100%; height: 100%; border: none; padding: 0; cursor: pointer; background: url('assets/fruit-sprite.webp') var(--fruit-pos) / 209.823% 194.507% no-repeat; filter: drop-shadow(3px 5px 4px var(--band-60)) brightness(var(--fruit-bright, 1))"></button></div>
         <sc-if value="{{ showClickHint }}" hint-placeholder-val="{{ true }}">
           <div style="{{ clickHintStyle }}"><span style="position: absolute; left: calc(155px + max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075)))))); top: 33px; transform: scale(var(--ff, 1)); transform-origin: -113px -17px; font-family: 'Kelly Slab', serif; font-size: 24px; line-height: 100%">Hey, click me!</span></div>
         </sc-if>
         <h1 style="margin: 0; padding-top: 95px; font-family: 'IM Fell DW Pica', serif; font-weight: 400; font-size: 64px; line-height: 100%; text-align: center">Lets get in touch!</h1>
-        <div style="margin-top: 24px; display: flex; justify-content: center; align-items: center; gap: 6px; font-family: 'IM Fell DW Pica', serif; font-size: 44px; line-height: 135%">
-          <span style="display: inline-block; position: relative; top: 2px; width: 54px; height: 33px; background: var(--ink); -webkit-mask: url('assets/mail-icon.png') center / contain no-repeat; mask: url('assets/mail-icon.png') center / contain no-repeat"></span>
+        <div style="margin-top: 24px; display: flex; justify-content: center; align-items: center; gap: 6px; font-family: 'Kelly Slab', serif; font-size: 44px; line-height: 135%">
           <a href="mailto:sophiahuangxyz@gmail.com" style="text-decoration: none">sophiahuangxyz@gmail.com</a>
         </div>
         <div style="display: flex; justify-content: center; padding-top: 60px">
           <div style="position: relative">
-            <img src="assets/resume-page1.png" alt="Sophia Huang resume" style="display: block; width: 1123px; max-width: calc(100vw / var(--pz, 0.9075) - 40px); height: auto; background: #fff; box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow)">
-            <a href="uploads/Sophia Huang Resume July 2026-3b91fdfa.pdf" download="Sophia Huang Resume.pdf" title="download resume" aria-label="download resume as PDF" style="position: absolute; top: 34px; right: 40px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; background: var(--band); border-radius: 50%; box-shadow: 2px 3px 8px rgba(0,0,0,0.25); opacity: 0.5; transition: transform 0.2s ease, opacity 0.2s ease" style-hover="transform: scale(1.1); opacity: 1"><svg width="20" height="22" viewBox="0 0 20 22" fill="none"><path d="M10 1 V14 M4 9 L10 15 L16 9 M2 20 H18" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+            <img src="assets/resume-letter4.png" alt="Sophia Huang resume" style="display: block; width: 1123px; max-width: calc(100vw / var(--pz, 0.9075) - 40px); height: auto; background: #fff; box-shadow: 7.225px 7.225px 4.128px 0 var(--shadow)">
+            <a href="assets/sophia-huang-resume.pdf" download="Sophia Huang Resume.pdf" onClick="{{ downloadResume }}" title="download resume" aria-label="download resume as PDF" style="position: absolute; top: 34px; right: 40px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; background: var(--band); border-radius: 50%; box-shadow: 2px 3px 8px rgba(0,0,0,0.25); opacity: 0.5; transition: transform 0.2s ease, opacity 0.2s ease" style-hover="transform: scale(1.1); opacity: 1"><svg width="20" height="22" viewBox="0 0 20 22" fill="none"><path d="M10 1 V14 M4 9 L10 15 L16 9 M2 20 H18" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
           </div>
         </div>
       </section>
     </sc-if>
+    <sc-if value="{{ lbPhoneOpen }}" hint-placeholder-val="{{ false }}">
+            <div onClick="{{ lbPhoneClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(10,10,14,0.82); display: flex; align-items: center; justify-content: center; animation: lb-fade 0.25s ease both">
+              <sc-if value="{{ notGrid1 }}" hint-placeholder-val="{{ true }}"><button onClick="{{ lbPhoneClose }}" aria-label="close" style="position: absolute; top: 28px; right: 36px; width: 44px; height: 44px; border: none; background: none; color: #fff; font-size: 34px; line-height: 44px; cursor: pointer; font-family: 'Kelly Slab', serif">✕</button></sc-if>
+              <sc-if value="{{ grid1 }}" hint-placeholder-val="{{ false }}"><button onClick="{{ lbPhoneClose }}" aria-label="close" style="position: absolute; top: calc(62px / var(--pz, 1)); right: calc(22px / var(--pz, 1)); width: calc(66px / var(--pz, 1) * 0.24); height: calc(66px / var(--pz, 1) * 0.24); z-index: 2; border: none; background: none; color: #fff; font-size: calc(51px / var(--pz, 1) * 0.24); line-height: 1; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Kelly Slab', serif">✕</button></sc-if>
+              <div onClick="{{ lbPhoneStop }}" style="width: 530.1px; height: 1100px; flex: none; position: relative; transform: scale({{ lbPhoneScale }})">
+                <div style="position: absolute; left: 27.4px; top: 33.2px; width: 475.3px; height: 1033.6px; border-radius: 56.8px; overflow: hidden; background: #000">
+                  <div style="position: absolute; left: 0; top: 0; width: 475.3px; height: 1033.6px; zoom: var(--pzi, 1); transform: scale(var(--pzs, 1)); transform-origin: 0 0">
+                  <iframe src="letterboxd-app/Letterboxd App.dc.html" title="Letterboxd app prototype — enlarged" style="position: absolute; left: -47.3px; top: -56.8px; width: 482px; height: 1062px; border: none; transform: scale(1.1826); transform-origin: top left; background: transparent" allowtransparency="true"></iframe>
+                  </div>
+                </div>
+                <img src="assets/phone-outline.png" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none">
+              </div>
+            </div>
+          </sc-if>
     <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
       <div onClick="{{ lightboxClose }}" style="position: fixed; inset: 0; z-index: 100; background: rgba(10,10,14,0.78); display: flex; align-items: center; justify-content: center; animation: lb-fade 0.25s ease both">
         <button onClick="{{ lightboxClose }}" aria-label="close" style="position: absolute; top: 28px; right: 36px; width: 44px; height: 44px; border: none; background: none; color: #fff; font-size: 34px; line-height: 44px; cursor: pointer; font-family: 'Kelly Slab', serif">✕</button>
@@ -507,9 +652,9 @@
         </div>
       </div>
     </sc-if>
-    <footer style="height: 95px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--band); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px">
+    <footer style="height: 95px; margin-left: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); margin-right: max(var(--bleedcap, -9999px), min(0px, calc(779px - (50vw / var(--pz, 0.9075))))); background: var(--band); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; z-index: 2; box-shadow: 0 -4px 10px rgba(0,0,0,0.18)">
       <span style="font-family: 'IM Fell DW Pica', serif; font-size: 24px; line-height: 100%">SOPHIA HUANG</span>
-      <span style="font-family: 'Kelly Slab', serif; font-size: 15px; line-height: 100%">last updated August 2026</span>
+      <span style="font-family: 'Kelly Slab', serif; font-size: 15px; line-height: 100%">last updated September 2026</span>
     </footer>
   </div>
 </div>
@@ -540,7 +685,7 @@ class Component extends DCLogic {
       return { hLbIdx: ((s.hLbIdx || 0) + dir + L) % L };
     });
   }
-  HANDS_SRCS = ['uploads/Zine/1 cover.png', 'uploads/Zine/2 endcover.png', 'uploads/Zine/2.5 zine.png', 'uploads/Zine/3 zine.png', 'uploads/Zine/4 zine.png', 'uploads/Zine/5 zine.png', 'uploads/Zine/6 endcover.png'];
+  HANDS_SRCS = ['assets/zine/1-cover.webp', 'assets/zine/2-endcover.webp', 'assets/zine/2-5-zine.webp', 'assets/zine/3-zine.webp', 'assets/zine/4-zine.webp', 'assets/zine/5-zine.webp', 'assets/zine/6-endcover.webp'];
   _kLbStep(dir) {
     if (this._kLbLock) return;
     this._kLbLock = true;
@@ -774,8 +919,21 @@ class Component extends DCLogic {
     this._tfMode = false;
   }
   componentDidMount() {
+    // sheet rises with the page at a reduced rate (K = portion held back) while it straightens;
+    // tilt/scale progress eases toward its target each frame so it glides instead of stepping
+    // two stages: 1) sheet held in place while it slides left + straightens to full width;
+    // 2) sheet scrolls up with the page until its top meets the nav bar, then normal scroll
+    const SP0 = 0.5762, S0F = 0.551;
+    const spTick = () => {
+      const tgt = this._spTgt ?? 0, d = tgt - this._spCur;
+      this._spCur = Math.abs(d) < 0.0005 ? tgt : this._spCur + d * 0.14;
+      document.documentElement.style.setProperty('--sp', this._spCur.toFixed(4));
+      this._spRaf = this._spCur === tgt ? null : requestAnimationFrame(spTick);
+    };
+    this._onSheetScroll = () => { const Z = this._zoom || 0.9075, ih = window.innerHeight, A = Math.max(1, ih * 0.5), B = 0.55 * (1 - S0F) * 0.9 * ih, sy = Math.max(0, window.scrollY), t = Math.min(1, sy / A), ds = document.documentElement.style; ds.setProperty('--holdh', (A / Z).toFixed(1) + 'px'); ds.setProperty('--lift', (B / Z).toFixed(1) + 'px'); const w = document.getElementById('sheet-wrap'); if (w) { const T = (w.getBoundingClientRect().top + window.scrollY) / Z; if (Math.abs(T - (this._sheetT ?? -1)) > 0.5) { this._sheetT = T; ds.setProperty('--sheett', T.toFixed(1) + 'px'); } } this._spTgt = SP0 + (1 - SP0) * (1 - (1 - t) * (1 - t)); if (this._spCur == null) { this._spCur = this._spTgt; ds.setProperty('--sp', this._spCur.toFixed(4)); } if (!this._spRaf) this._spRaf = requestAnimationFrame(spTick); };
+    window.addEventListener('scroll', this._onSheetScroll, { passive: true }); this._onSheetScroll();
     // browser back/forward navigates between pages (hash-based)
-    const pages = ['projects', 'forfun', 'contact', 'resume', 'letterboxd', 'fusar', 'kengo', 'hands'];
+    const pages = ['projects', 'forfun', 'contact', 'resume', 'letterboxd', 'fusar', 'kengo', 'hands', 'bloom'];
     const fromHash = () => {
       const p = (location.hash || '').slice(1);
       if (pages.includes(p) && p !== this.state.page) { this.setState({ page: p }); window.scrollTo(0, 0); }
@@ -844,26 +1002,39 @@ class Component extends DCLogic {
       this._heroScale = hs;
       const ff = Math.max(1, 0.45375 / Z);
       if (root) {
-        root.style.setProperty('--cardw', cardw + 'px'); root.style.setProperty('--gutter', gutter + 'px');
+        root.style.setProperty('--cardw', cardw + 'px'); root.style.setProperty('--gridw', (gridCols * cardw + (gridCols - 1) * 32) + 'px'); root.style.setProperty('--gutter', gutter + 'px');
         root.style.setProperty('--heroscale', hs);
         root.style.setProperty('--herocolw', herocolw);
         root.style.setProperty('--heroextra', heroextra);
+        root.style.setProperty('--herobot', (538 + (parseFloat(heroextra) || 0) / hs).toFixed(1) + 'px');
         root.style.setProperty('--ff', ff);
         root.style.setProperty('--ffhero', ff / hs);
         root.style.setProperty('--ffcs', ff / cs);
         root.style.setProperty('--tagfs', '40px');
       }
       this._zoom = Z;
+      // measure the sheet only after the new zoom/--ff are applied — using the previous
+      // page's zoom left --sheett stale, hiding the projects sheet until the first scroll
+      if (this._onSheetScroll) this._onSheetScroll();
       // collapse to hamburger only once the nav links would cross into the name
       const narrow = Math.min(1558, W / Math.max(Z, 0.45375)) < 1350;
-      const pdOn = pv || W < 707;
+      // Kengo Kuma / Invisable Hands keep the phone format (enlarged carousel, text below) on portrait
+      // tablets; landscape tablets use the desktop layout
+      const portrait = window.innerHeight > window.innerWidth;
+      const pdOn = pv || W < 707 || (['kengo', 'hands'].includes(this.state.page) && W <= 1024 && portrait);
       if (root) {
-        root.style.setProperty('--lbgap', pdOn ? '1150px' : '-743px');
-        root.style.setProperty('--lbx', pdOn ? '2200px' : '0px');
-        // phone: text renders at a fixed readable size regardless of page zoom
-        const kfs = (13.3 / Z).toFixed(1) + 'px', tfs = (23.8 / Z).toFixed(1) + 'px';
+        root.style.setProperty('--lbgap', pdOn ? '697px' : '-743px');
+        root.style.setProperty('--lbx', pdOn ? '1713px' : '0px');
+        // phone: text renders at a fixed readable size regardless of page zoom (tablet: a bit larger)
+        const tab = pdOn && W >= 707, fs = tab ? 1.25 : 1;
+        const kfs = (13.3 * fs / Z).toFixed(1) + 'px', tfs = (23.8 * fs / Z).toFixed(1) + 'px';
         root.style.setProperty('--kfs', pdOn ? kfs : '30px');
-        root.style.setProperty('--kfs24', pdOn ? (9.8 / Z).toFixed(1) + 'px' : '24px');
+        root.style.setProperty('--kfs24', pdOn ? (9.8 * fs / Z).toFixed(1) + 'px' : '24px');
+        // tablet: the phone offsets assume phone zoom and leave a big gap under the title —
+        // pull the carousel + text up so the carousel sits ~30px below the title
+        const ttlBot = 0.6 * (39 + 120 * ff) + 1.2 * 23.8 * fs / Z, carTop = 36 + 120 * ff + 230 - 0.4 * (39 + 120 * ff);
+        root.style.setProperty('--pdshift', tab ? Math.max(0, carTop - ttlBot - 30 / Z).toFixed(1) + 'px' : '0px');
+        root.style.setProperty('--kfs26', pdOn ? kfs : '26px');
         root.style.setProperty('--tfs44', pdOn ? tfs : '44px');
         root.style.setProperty('--tfs52', pdOn ? tfs : '52px');
       }
@@ -871,13 +1042,40 @@ class Component extends DCLogic {
       root.style.setProperty('--pdta', pdOn ? 'right' : 'left');
       if (narrow !== !!this.state.narrow) this.setState({ narrow, hamOpen: false });
       this._tfSchedule(); // zoom changed: recompute repaired sizes, or re-check a healthy verdict
+      this._fitText();
     };
+    // phone: Kengo Kuma / Invisable Hands sections end just below their text instead of a
+    // hardcoded height (text wraps differently per device, so measure it); on screens taller
+    // than the content, the section's CSS floor still pins the footer to the bottom
+    this._fitText = () => {
+      const root = document.querySelector('[data-theme]'), sec = document.querySelector('[data-fit-text]');
+      const body = sec && sec.querySelector('[data-fit-body]'), last = body && body.lastElementChild;
+      if (!root || !last || !this._zoom) return;
+      const Z = this._zoom, h = (last.getBoundingClientRect().bottom - sec.getBoundingClientRect().top) / Z + 44 / Z;
+      root.style.setProperty('--fith', h.toFixed(1) + 'px');
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => this._fitText());
     this._onRz();
     window.addEventListener('resize', this._onRz);
+    // Bloom page: scroll-driven phone fan-out (stacked left -> fanned up-right)
+    const bfanTick = () => {
+      this._bfanRaf = requestAnimationFrame(bfanTick);
+      const el = document.getElementById('bloom-fan');
+      if (!el) { this._bfanC = 0; this._bfanLast = -1; return; }
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      let t = (vh * 0.88 - r.top) / (vh * 0.62);
+      t = Math.max(0, Math.min(1, t));
+      t = t * t * (3 - 2 * t);
+      const c = this._bfanC == null ? t : this._bfanC + (t - this._bfanC) * 0.14;
+      this._bfanC = c;
+      if (Math.abs(c - (this._bfanLast ?? -1)) > 0.0004) { this._bfanLast = c; el.style.setProperty('--bfan', c.toFixed(4)); }
+    };
+    bfanTick();
     this._heavyWheel = (e) => {
       if (e.defaultPrevented || e.ctrlKey) return;
       if (this.state.lightbox || this.state.kLightbox || this.state.hLightbox) return;
-      const range = (this.state.page === 'projects' ? 538 * (this._heroScale || 1) : this.state.page === 'letterboxd' ? 512 : 0) * (this._zoom || 0.9075);
+      const range = (this.state.page === 'letterboxd' ? 512 : 0) * (this._zoom || 0.9075);
       if (!range) return;
       const y = window.scrollY;
       // only damp in the final stretch, as the section approaches the nav header
@@ -934,18 +1132,18 @@ class Component extends DCLogic {
     }, 500);
     document.title = 'Sophia Huang';
     const saved = localStorage.getItem('sh-portfolio-theme');
-    const theme = saved || (this.props.defaultVariant ?? 'blue');
+    const theme = 'blue';
     this.setState({ theme });
     this.applyBodyBg(theme);
     const AC = window.AudioContext || window.webkitAudioContext;
     if (AC) {
       this._clickAC = new AC();
       fetch('uploads/mixkit-cool-interface-click-tone-2568.wav').then((r) => r.arrayBuffer())
-        .then((ab) => new Promise((res, rej) => this._clickAC.decodeAudioData(ab, res, rej)))
+        .then((ab) => new Promise((res, rej) => { const p = this._clickAC.decodeAudioData(ab, res, rej); if (p && p.catch) p.catch(() => {}); }))
         .then((buf) => { this._clickBuf = buf; })
         .catch(() => {});
       fetch('assets/ui-click.mp3').then((r) => r.arrayBuffer())
-        .then((ab) => new Promise((res, rej) => this._clickAC.decodeAudioData(ab, res, rej)))
+        .then((ab) => new Promise((res, rej) => { const p = this._clickAC.decodeAudioData(ab, res, rej); if (p && p.catch) p.catch(() => {}); }))
         .then((buf) => { this._uiClickBuf = buf; })
         .catch(() => {});
       this._onUiClick = (e) => {
@@ -969,7 +1167,7 @@ class Component extends DCLogic {
       this._acWake = () => { try { if (this._clickAC && this._clickAC.state === 'suspended') this._clickAC.resume(); } catch (err) {} };
       window.addEventListener('touchend', this._acWake, { passive: true });
       fetch('assets/peel-8.5-9.5.wav').then((r) => r.arrayBuffer())
-        .then((ab) => new Promise((res, rej) => this._clickAC.decodeAudioData(ab, res, rej)))
+        .then((ab) => new Promise((res, rej) => { const p = this._clickAC.decodeAudioData(ab, res, rej); if (p && p.catch) p.catch(() => {}); }))
         .then((buf) => { this._peelBuf = buf; })
         .catch(() => {});
     }
@@ -1007,9 +1205,10 @@ class Component extends DCLogic {
   }
   makeTagline() {
     if (this._tagEls) return this._tagEls;
-    const words = [['PRODUCT ', 1], ['DESIGNER  ', 1], ['INTERESTED ', 0], ['IN ', 0], ['COMBINING ', 0], ['MOTION, ', 0], ['SOUND, ', 0], ['AND ', 0], ['AESTHETICS', 0]];
+    const words = [['PRODUCT ', 0], ['DESIGNER', 0], null, ['interested ', 0], ['in ', 0], ['combining ', 0], ['sound, ', 0], ['motion, ', 0], ['and ', 0], ['aesthetics', 0]];
     this.phys = [];
     this._tagEls = words.map((w, wi) => {
+      if (!w) return React.createElement('br', { key: wi });
       const letters = Array.from(w[0]).map((ch, ci) => {
         if (ch === ' ') return ' ';
         const p = { x: 0, y: 0, vx: 0, vy: 0, el: null };
@@ -1050,12 +1249,15 @@ class Component extends DCLogic {
     }
   };
   componentWillUnmount() {
+    if (this._onSheetScroll) window.removeEventListener('scroll', this._onSheetScroll);
+    if (this._spRaf) cancelAnimationFrame(this._spRaf);
     if (this._onRz) window.removeEventListener('resize', this._onRz);
     if (this._heavyWheel) window.removeEventListener('wheel', this._heavyWheel);
     if (this._kengoPoll) clearInterval(this._kengoPoll);
     if (this._kengoAuto) clearInterval(this._kengoAuto);
     if (this._phonePoll) clearInterval(this._phonePoll);
     cancelAnimationFrame(this._tagRaf);
+    cancelAnimationFrame(this._bfanRaf);
     if (this._tagTouchMove) window.removeEventListener('pointermove', this._tagTouchMove);
     this._tfDead = true;
     if (this._tfMo) this._tfMo.disconnect();
@@ -1271,14 +1473,14 @@ class Component extends DCLogic {
     window.addEventListener('contextmenu', onCtx);
   }
   applyBodyBg(theme) {
-    const bg = theme === 'peach' ? '#FFEEDA' : '#2F60D4';
-    const band = theme === 'peach' ? '#EFACAC' : '#0042DB';
+    const bg = '#FFFFFF';
+    const band = '#FFFFFF';
     document.body.style.background = bg;
     // html bg shows in the overscroll rubber-band areas past the nav/footer — use the band color there
     document.documentElement.style.background = band;
   }
   renderVals() {
-    const theme = this.state.theme || (this.props.defaultVariant ?? 'blue');
+    const theme = 'blue';
     const page = this.state.page;
     // clicks on the image-slot's own editing chrome (Replace/Edit buttons,
     // empty-state browse, reframe handles) must not navigate the card
@@ -1302,7 +1504,7 @@ class Component extends DCLogic {
       peachShadow: this.props.peachShadow ?? '#FBDECF',
       peachHighlight: this.props.peachHighlight ?? '#FFEEDA',
       peachSheen: this.props.peachSheen ?? '#FFF6EC',
-      showClickHint: this.props.showClickHint ?? true,
+      showClickHint: false,
       fruitTitle: theme === 'blue' ? 'blueberry \u2014 click to switch to peach' : 'peach \u2014 click to switch to blueberry',
       toggleTheme: (e) => {
         if (this._clickAC && this._clickBuf) {
@@ -1369,11 +1571,27 @@ class Component extends DCLogic {
       notes: this.state.notes.map((n) => ({
         style: { position: 'absolute', left: n.x + 'px', top: n.y + 'px', width: this.NOTE_W + 'px', height: this.NOTE_H + 'px', touchAction: 'none', cursor: 'pointer', boxShadow: '2px 3px 6px rgba(0,0,0,0.25)', outline: '1px solid #E8DA85', background: 'url(' + n.src + ') center / cover no-repeat' }
       })),
+      downloadResume: (e) => {
+        e.preventDefault();
+        const href = e.currentTarget.href;
+        fetch(href).then((r) => { if (!r.ok) throw 0; return r.blob(); }).then((b) => {
+          const u = URL.createObjectURL(new Blob([b], { type: 'application/pdf' }));
+          const a = document.createElement('a'); a.href = u; a.download = 'Sophia Huang Resume.pdf';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(u), 4000);
+        }).catch(() => window.open(href, '_blank'));
+      },
       isProjects: page === 'projects',
       grid3: (this.state.gridCols || 3) === 3,
       grid2: this.state.gridCols === 2,
       grid1: this.state.gridCols === 1,
-      navOpProjects: ['projects', 'seawagyu', 'letterboxd', 'kengo', 'hands', 'fusar', 'vsco'].includes(page) ? 0.8 : 1,
+      notGrid1: this.state.gridCols !== 1,
+      lbTryT: this.state.gridCols === 1 ? 'translate(9px, 99px)' : 'none',
+      lbArrowT: this.state.gridCols === 1 ? 'translate(-79px, 103px)' : 'none',
+      bmVisHome: (this.state.bmHov || this.state.bmPinned || 'home') === 'home' ? 'visible' : 'hidden',
+      bmVisJournal: (this.state.bmHov || this.state.bmPinned || 'home') === 'journal' ? 'visible' : 'hidden',
+      bmVisFitness: (this.state.bmHov || this.state.bmPinned || 'home') === 'fitness' ? 'visible' : 'hidden',
+      navOpProjects: ['projects', 'seawagyu', 'letterboxd', 'kengo', 'hands', 'fusar', 'vsco', 'bloom'].includes(page) ? 0.8 : 1,
       navOpForFun: page === 'forfun' ? 0.8 : 1,
       navOpContact: page === 'contact' ? 0.8 : 1,
       navOpResume: page === 'resume' ? 0.8 : 1,
@@ -1386,6 +1604,30 @@ class Component extends DCLogic {
       hamForFun: () => { this.setState({ hamOpen: false }); go('forfun')(); },
       hamContact: () => { this.setState({ hamOpen: false }); go('contact')(); },
       hamResume: () => { this.setState({ hamOpen: false }); go('resume')(); },
+      isBloom: page === 'bloom',
+      bmIsHome: (this.state.bmHov || this.state.bmPinned || 'home') === 'home',
+      bmIsJournal: (this.state.bmHov || this.state.bmPinned || 'home') === 'journal',
+      bmIsFitness: (this.state.bmHov || this.state.bmPinned || 'home') === 'fitness',
+      bmTitle: ({ home: 'HOME', journal: 'DAILY JOURNAL', fitness: 'FITNESS TRACKING' })[(this.state.bmHov || this.state.bmPinned || 'home')],
+      bmIcon: ({ home: 'uploads/FlowerTulip.png', journal: 'uploads/BookOpenText.png', fitness: 'uploads/Barbell.png' })[this.state.bloomFocus || 'home'],
+      bmScrJournal: (this.state.bmHov || this.state.bmPinned || 'home') === 'journal' ? 1 : 0,
+      bmOpHome: (this.state.bmHov || this.state.bmPinned || 'home') === 'home' ? 1 : 0.3,
+      bmOpJournal: (this.state.bmHov || this.state.bmPinned || 'home') === 'journal' ? 1 : 0.3,
+      bmOpFitness: (this.state.bmHov || this.state.bmPinned || 'home') === 'fitness' ? 1 : 0.3,
+      bmHoverHome: () => this.setState({ bmHov: 'home' }),
+      bmHoverJournal: () => this.setState({ bmHov: 'journal' }),
+      bmHoverFitness: () => this.setState({ bmHov: 'fitness' }),
+      bmHoverOff: () => this.setState({ bmHov: null }),
+      bmPinHome: () => this.setState({ bmPinned: 'home' }),
+      bmPinJournal: () => this.setState({ bmPinned: 'journal' }),
+      bmPinFitness: () => this.setState({ bmPinned: 'fitness' }),
+      bmScrFitness: (this.state.bmHov || this.state.bmPinned || 'home') === 'fitness' ? 1 : 0,
+      bmDdOpen: this.state.bmDd === true,
+      bmDdToggle: (e) => { e.stopPropagation(); this.setState((s) => ({ bmDd: !s.bmDd })); },
+      bmPickHome: (e) => { e.stopPropagation(); this.setState({ bmPinned: 'home', bmHov: null, bmDd: false }); },
+      bmPickJournal: (e) => { e.stopPropagation(); this.setState({ bmPinned: 'journal', bmHov: null, bmDd: false }); },
+      bmPickFitness: (e) => { e.stopPropagation(); this.setState({ bmPinned: 'fitness', bmHov: null, bmDd: false }); },
+      bloomCardClick: (e) => { if (isSlotChrome(e)) return; e.preventDefault(); e.stopPropagation(); go('bloom')(); },
       isLetterboxd: page === 'letterboxd',
       lbCardClick: (e) => { if (isSlotChrome(e)) return; e.preventDefault(); e.stopPropagation(); go('letterboxd')(); },
       isFusar: page === 'fusar',
@@ -1419,8 +1661,10 @@ class Component extends DCLogic {
       },
       handsLeave: () => { if (this._hHold) { this._hHold = false; this._hLast = Date.now(); } },
       funWomensClick: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['uploads/IMG_7048_edit3.jpg', 'uploads/IMG_7050_edit3.jpg'], hLbIdx: 0 }); },
-      funMens1Click: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['uploads/IMG_9341.png', 'uploads/kyle hair.png', 'uploads/kyle 2.png'], hLbIdx: 0 }); },
-      funMensClick: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['assets/mens-front-34.png', 'uploads/IMG_9578_edit3.jpg'], hLbIdx: 0 }); },
+      funMens1Click: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['assets/fun/mens1-front.webp', 'assets/fun/kyle-hair.webp', 'assets/fun/kyle-2.webp'], hLbIdx: 0 }); },
+      funLayeredClick: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['assets/fun/layered-front.webp', 'assets/fun/layered-back.webp'], hLbIdx: 0 }); },
+      funAppleClick: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['assets/fun/apple-1.webp', 'assets/fun/apple-2.webp', 'assets/fun/apple-3.webp'], hLbIdx: 0 }); },
+      funMensClick: (e) => { e.preventDefault(); e.stopPropagation(); this.setState({ hLightbox: true, hLbSrcs: ['assets/fun/mens-front-34.webp', 'assets/fun/mens-back.webp'], hLbIdx: 0 }); },
       hLightboxOpen: this.state.hLightbox === true,
       hLbClose: () => { this._hLast = Date.now(); this.setState({ hLightbox: false }); },
       hLbStop: (e) => e.stopPropagation(),
@@ -1439,20 +1683,27 @@ class Component extends DCLogic {
       kLbStop: (e) => e.stopPropagation(),
       kLbPrev: (e) => { e.stopPropagation(); this._kLbStep(-1); },
       kLbNext: (e) => { e.stopPropagation(); this._kLbStep(1); },
-      kengoLbSlides: ['uploads/kk 1.png', 'uploads/kk 2.png', 'uploads/kk3.png', 'uploads/kk4.png'].map((src, i) => {
+      kengoLbSlides: ['assets/kengo/kk1.webp', 'assets/kengo/kk2.webp', 'assets/kengo/kk3.webp', 'assets/kengo/kk4.webp'].map((src, i) => {
         let off = (i - (this.state.kLbIdx ?? 0) + 4) % 4;
         if (off === 3) off = -1;
         return {
-          style: 'position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: ' + (off === 2 ? 'none' : 'transform 0.95s cubic-bezier(0.3,0.75,0.25,1)') + '; transform: translateX(' + (off * 100) + '%); background: url(\'' + encodeURI(src) + '\') center / contain no-repeat',
+          style: 'position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: ' + (off === 2 ? 'none' : 'transform 0.95s cubic-bezier(0.3,0.75,0.25,1)') + '; transform: translateX(' + (off * 100) + '%); overflow: hidden',
+          bg: 'position: absolute; inset: 0; transform: scale(1.3); background: url(\'' + encodeURI(src) + '\') center / contain no-repeat',
         };
       }),
-      kengoSlides: ['uploads/kk 1.png', 'uploads/kk 2.png', 'uploads/kk3.png', 'uploads/kk4.png'].map((src, i) => {
+      kengoSlides: ['assets/kengo/kk1.webp', 'assets/kengo/kk2.webp', 'assets/kengo/kk3.webp', 'assets/kengo/kk4.webp'].map((src, i) => {
         let off = (i - this.state.kengoIdx + 4) % 4;
         if (off === 3) off = -1;
         return {
-          style: 'position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: ' + (off === 2 ? 'none' : 'transform 0.95s cubic-bezier(0.3,0.75,0.25,1)') + '; transform: translateY(' + (off * 100) + '%); background: url(\'' + encodeURI(src) + '\') center / cover no-repeat',
+          style: 'position: absolute; left: 0; top: 0; width: 100%; height: 100%; transition: ' + (off === 2 ? 'none' : 'transform 0.95s cubic-bezier(0.3,0.75,0.25,1)') + '; transform: translateY(' + (off * 100) + '%); overflow: hidden',
+          bg: 'position: absolute; inset: 0; transform: scale(1.3); background: url(\'' + encodeURI(src) + '\') center / cover no-repeat',
         };
       }),
+      lbPhoneOpen: this.state.lbPhone === true,
+      lbPhoneShow: () => this.setState({ lbPhone: true }),
+      lbPhoneClose: () => this.setState({ lbPhone: false }),
+      lbPhoneStop: (e) => e.stopPropagation(),
+      lbPhoneScale: Math.min((window.innerHeight * 0.92 / (this._zoom || 0.9075)) / 1100, (window.innerWidth * 0.86 / (this._zoom || 0.9075)) / 530.1),
       lightboxOpen: this.state.lightbox === true,
       vscoCardClick: (e) => { if (isSlotChrome(e)) return; e.preventDefault(); e.stopPropagation(); this.setState({ lightbox: true }); },
       lightboxClose: () => this.setState({ lightbox: false }),

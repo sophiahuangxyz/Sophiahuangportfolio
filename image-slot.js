@@ -335,6 +335,7 @@
     '  opacity:.35;transition:border-color .12s,opacity .12s}' +
     ':host([data-over]) .ring{border-color:#c96442;opacity:1}' +
     ':host([data-filled]) .ring{display:none}' +
+    '.ring{display:none!important}' +
     // Controls overlay INSIDE the frame, pinned to the top-right corner, so
     // a full-bleed slot in an overflow:hidden container still shows them
     // (the old below-mask placement got clipped). Credit sits bottom-left,
