@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>Sophia Huang Portfolio</title>
+<meta name="description" content="Sophia Huang — product designer. Portfolio of brand identity, UI/UX, and graphic design work.">
+<meta property="og:title" content="Sophia Huang Portfolio">
+<meta property="og:description" content="Product designer — brand identity, UI/UX, and graphic design portfolio.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sophiahuang.net/">
+<meta property="og:image" content="https://sophiahuang.net/assets/apple-touch-icon.png">
+<meta name="twitter:card" content="summary">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -1130,7 +1138,7 @@ class Component extends DCLogic {
         else if (Date.now() - this._hLast >= 7000) this._hAdvance(1);
       }
     }, 500);
-    document.title = 'Sophia Huang';
+    document.title = 'Sophia Huang Portfolio';
     const saved = localStorage.getItem('sh-portfolio-theme');
     const theme = 'blue';
     this.setState({ theme });
